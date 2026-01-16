@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-xl gradient-gold flex items-center justify-center">
                 <Box className="w-6 h-6 text-accent-foreground" />
               </div>
-              <span className="font-display text-2xl font-bold text-primary-foreground">RoomViz</span>
+              <span className="font-display text-2xl font-bold text-primary-foreground">HomeCraft</span>
             </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               Visualisez votre intérieur idéal en 3D avec les meubles des plus grandes enseignes.
@@ -51,7 +51,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © 2025 RoomViz. Tous droits réservés.
+            © 2025 HomeCraft. Tous droits réservés.
           </p>
           <div className="flex gap-4">
             <a href="#" className="text-primary-foreground/50 hover:text-accent text-sm transition-colors">Twitter</a>

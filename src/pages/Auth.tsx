@@ -5,108 +5,87 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Box, Mail, Lock, User, ArrowLeft, Loader2 } from "lucide-react";
-// import { supabase } from "@/integrations/supabase/client";
+import { Box, Mail, Lock, User, ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useAuth, useSignIn, useSignUp } from "@/hooks/useAuth";
+import { PasswordSchema } from "@/lib/validation";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") === "signup" ? "signup" : "login");
-  const [isLoading, setIsLoading] = useState(false);
+
+  // Auth hooks
+  const { user } = useAuth();
+  const signInMutation = useSignIn();
+  const signUpMutation = useSignUp();
 
   // Login form
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Signup form
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupName, setSignupName] = useState("");
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
 
   // Check if already logged in
   useEffect(() => {
-    // const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-    //   if (session) {
-    //     navigate("/dashboard");
-    //   }
-    // });
-
-    // supabase.auth.getSession().then(({ data: { session } }) => {
-    //   if (session) {
-    //     navigate("/dashboard");
-    //   }
-    // });
-
-    // return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
-      // const { error } = await supabase.auth.signInWithPassword({
-      //   email: loginEmail,
-      //   password: loginPassword,
-      // });
-
-      // if (error) {
-      //   if (error.message === "Invalid login credentials") {
-      //     toast.error("Email ou mot de passe incorrect");
-      //   } else {
-      //     toast.error(error.message);
-      //   }
-      //   return;
-      // }
+      await signInMutation.mutateAsync({
+        email: loginEmail,
+        password: loginPassword,
+      });
 
       toast.success("Connexion réussie !");
-    } catch {
-      toast.error("Une erreur s'est produite");
-    } finally {
-      setIsLoading(false);
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      if (message.includes("Invalid login credentials")) {
+        toast.error("Email ou mot de passe incorrect");
+      } else {
+        toast.error(message);
+      }
     }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    if (signupPassword.length < 6) {
-      toast.error("Le mot de passe doit contenir au moins 6 caractères");
-      setIsLoading(false);
+    // Valider le mot de passe avec Zod
+    const passwordValidation = PasswordSchema.safeParse(signupPassword);
+    if (!passwordValidation.success) {
+      toast.error(passwordValidation.error.issues[0].message);
       return;
     }
 
     try {
-      // const redirectUrl = `${window.location.origin}/`;
-      
-      // const { error } = await supabase.auth.signUp({
-      //   email: signupEmail,
-      //   password: signupPassword,
-      //   options: {
-      //     emailRedirectTo: redirectUrl,
-      //     data: {
-      //       full_name: signupName,
-      //     },
-      //   },
-      // });
+      await signUpMutation.mutateAsync({
+        email: signupEmail,
+        password: signupPassword,
+        fullName: signupName,
+      });
 
-      // if (error) {
-      //   if (error.message.includes("already registered")) {
-      //     toast.error("Cet email est déjà utilisé");
-      //   } else {
-      //     toast.error(error.message);
-      //   }
-      //   return;
-      // }
-
-      toast.success("Compte créé avec succès !");
-    } catch {
-      toast.error("Une erreur s'est produite");
-    } finally {
-      setIsLoading(false);
+      toast.success("Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.");
+      setActiveTab("login");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      if (message.includes("already registered")) {
+        toast.error("Cet email est déjà utilisé");
+      } else {
+        toast.error(message);
+      }
     }
   };
 
@@ -133,7 +112,7 @@ const Auth = () => {
             <div className="mx-auto w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-4">
               <Box className="w-8 h-8 text-accent-foreground" />
             </div>
-            <CardTitle className="font-display text-2xl">RoomViz</CardTitle>
+            <CardTitle className="font-display text-2xl">HomeCraft</CardTitle>
             <CardDescription>
               Connectez-vous pour accéder à vos projets
             </CardDescription>
@@ -170,22 +149,33 @@ const Auth = () => {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="login-password"
-                        type="password"
+                        type={showLoginPassword ? "text" : "password"}
                         placeholder="••••••••"
-                        className="pl-10"
+                        className="pl-10 pr-10"
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {showLoginPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </button>
                     </div>
                   </div>
 
                   <Button
                     type="submit"
                     className="w-full gradient-gold text-accent-foreground hover:opacity-90"
-                    disabled={isLoading}
+                    disabled={signInMutation.isPending}
                   >
-                    {isLoading ? (
+                    {signInMutation.isPending ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         Connexion...
@@ -237,26 +227,37 @@ const Auth = () => {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="signup-password"
-                        type="password"
+                        type={showSignupPassword ? "text" : "password"}
                         placeholder="••••••••"
-                        className="pl-10"
+                        className="pl-10 pr-10"
                         value={signupPassword}
                         onChange={(e) => setSignupPassword(e.target.value)}
                         required
-                        minLength={6}
+                        minLength={12}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowSignupPassword(!showSignupPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {showSignupPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Au moins 6 caractères
+                      Minimum 12 caractères avec majuscule, minuscule, chiffre et caractère spécial
                     </p>
                   </div>
 
                   <Button
                     type="submit"
                     className="w-full gradient-gold text-accent-foreground hover:opacity-90"
-                    disabled={isLoading}
+                    disabled={signUpMutation.isPending}
                   >
-                    {isLoading ? (
+                    {signUpMutation.isPending ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         Création...

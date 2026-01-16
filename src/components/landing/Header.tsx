@@ -33,7 +33,7 @@ const Header = () => {
             <span className={`font-display text-xl md:text-2xl font-bold transition-colors ${
               isScrolled ? "text-foreground" : "text-primary-foreground"
             }`}>
-              RoomViz
+              HomeCraft
             </span>
           </Link>
 
