@@ -78,22 +78,23 @@ export const PhotoEditorToolbar = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 md:gap-4 px-2 md:px-4 py-2 bg-background border-b border-border min-h-[120px] md:min-h-0">
+    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-4 px-2 md:px-4 py-2 bg-background border-b border-border">
       {/* Menu Options */}
       <div className="relative" ref={optionsRef}>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+          className="h-8 sm:h-9 px-2 sm:px-3"
         >
-          <Settings className="h-4 w-4 md:mr-1" />
-          <span className="hidden md:inline">Options</span>
+          <Settings className="h-4 w-4 sm:mr-1" />
+          <span className="hidden sm:inline text-xs sm:text-sm">Options</span>
         </Button>
 
         {isOptionsOpen && (
-          <div className="absolute top-full left-0 mt-1 bg-background border border-border rounded-lg shadow-lg py-1 z-50 min-w-[180px]">
+          <div className="absolute top-full left-0 mt-1 bg-background border border-border rounded-lg shadow-lg py-1 z-50 min-w-[160px] sm:min-w-[180px]">
             <button
-              className="w-full px-4 py-2 text-left text-sm hover:bg-muted flex items-center gap-2"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-2 text-left text-xs sm:text-sm hover:bg-muted flex items-center gap-2 active:bg-muted/80"
               onClick={() => fileInputRef.current?.click()}
             >
               <ImagePlus className="h-4 w-4" />
@@ -101,7 +102,7 @@ export const PhotoEditorToolbar = ({
             </button>
             {backgroundImage && (
               <button
-                className="w-full px-4 py-2 text-left text-sm hover:bg-muted flex items-center gap-2 text-destructive"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-2 text-left text-xs sm:text-sm hover:bg-muted flex items-center gap-2 text-destructive active:bg-muted/80"
                 onClick={() => {
                   onRemoveImage();
                   setIsOptionsOpen(false);
@@ -113,7 +114,7 @@ export const PhotoEditorToolbar = ({
             )}
             <div className="h-px bg-border my-1" />
             <button
-              className="w-full px-4 py-2 text-left text-sm hover:bg-muted flex items-center gap-2 text-destructive"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-2 text-left text-xs sm:text-sm hover:bg-muted flex items-center gap-2 text-destructive active:bg-muted/80"
               onClick={() => {
                 onReset();
                 setIsOptionsOpen(false);
@@ -134,11 +135,11 @@ export const PhotoEditorToolbar = ({
         />
       </div>
 
-      <div className="h-6 w-px bg-border hidden md:block" />
+      <div className="h-6 w-px bg-border hidden sm:block" />
 
       {/* Selection controls - toujours visibles, désactivés si rien n'est sélectionné */}
-      <div className="flex items-center gap-2 w-full md:w-auto order-3 md:order-none">
-        <span className={`text-xs md:text-sm font-medium truncate max-w-[120px] ${selectedItem ? 'text-foreground' : 'text-muted-foreground'}`}>
+      <div className="hidden sm:flex items-center gap-2">
+        <span className={`text-xs sm:text-sm font-medium truncate max-w-[100px] sm:max-w-[120px] ${selectedItem ? 'text-foreground' : 'text-muted-foreground'}`}>
           {selectedItem ? selectedItem.name : 'Aucun meuble'}
         </span>
       </div>
@@ -150,8 +151,9 @@ export const PhotoEditorToolbar = ({
           onClick={() => onRotate("left")}
           title="Pivoter à gauche"
           disabled={!selectedItem}
+          className="h-8 w-8 sm:h-9 sm:w-9"
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         </Button>
         <Button
           variant="outline"
@@ -159,42 +161,43 @@ export const PhotoEditorToolbar = ({
           onClick={() => onRotate("right")}
           title="Pivoter à droite"
           disabled={!selectedItem}
+          className="h-8 w-8 sm:h-9 sm:w-9"
         >
-          <RotateCw className="h-4 w-4" />
+          <RotateCw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         </Button>
       </div>
 
-      <div className={`flex items-center gap-2 w-full md:w-auto order-4 md:order-none ${!selectedItem ? 'opacity-50' : ''}`}>
-        <ZoomOut className="h-4 w-4 text-muted-foreground" />
+      <div className={`hidden sm:flex items-center gap-2 ${!selectedItem ? 'opacity-50' : ''}`}>
+        <ZoomOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
         <Slider
           value={[selectedItem?.scale ?? 1]}
           onValueChange={([value]) => onScale(value)}
           min={0.3}
           max={2}
           step={0.1}
-          className="w-full md:w-24"
+          className="w-16 sm:w-20 md:w-24"
           disabled={!selectedItem}
         />
-        <ZoomIn className="h-4 w-4 text-muted-foreground" />
+        <ZoomIn className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
       </div>
 
       <Button
         variant="destructive"
         size="sm"
         onClick={onDelete}
-        className="md:inline-flex"
         disabled={!selectedItem}
+        className="h-8 sm:h-9 px-2 sm:px-3"
       >
-        <Trash2 className="h-4 w-4 md:mr-1" />
-        <span className="hidden md:inline">Supprimer</span>
+        <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
+        <span className="hidden sm:inline text-xs sm:text-sm">Supprimer</span>
       </Button>
 
       <div className="flex-1" />
 
       {/* Global actions */}
-      <Button size="sm" onClick={onSave}>
-        <Save className="h-4 w-4 md:mr-1" />
-        <span className="hidden md:inline">Sauvegarder</span>
+      <Button size="sm" onClick={onSave} className="h-8 sm:h-9 px-2 sm:px-3">
+        <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
+        <span className="hidden sm:inline text-xs sm:text-sm">Sauvegarder</span>
       </Button>
     </div>
   );

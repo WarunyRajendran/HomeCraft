@@ -63,6 +63,14 @@ export const authService = {
     if (error) throw error;
   },
 
+  resetPasswordForEmail: async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (error) throw error;
+  },
+
   updateProfile: async (userId: string, updates: { full_name?: string }) => {
     const { error } = await supabase
       .from('profiles')

@@ -99,18 +99,18 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
+      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl gradient-gold flex items-center justify-center">
-                  <Box className="w-5 h-5 text-accent-foreground" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl gradient-gold flex items-center justify-center">
+                  <Box className="w-4 h-4 sm:w-5 sm:h-5 text-accent-foreground" />
                 </div>
-                <span className="font-display text-xl font-bold text-foreground">HomeCraft</span>
+                <span className="font-display text-lg sm:text-xl font-bold text-foreground">HomeCraft</span>
               </div>
             </div>
           </div>
@@ -118,22 +118,22 @@ const Settings = () => {
       </header>
 
       {/* Main content */}
-      <main className="container mx-auto px-4 py-10 max-w-2xl">
-        <h1 className="font-display text-3xl font-bold text-foreground mb-8">Paramètres</h1>
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-10 pb-safe max-w-2xl">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">Paramètres</h1>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Profil */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <User className="h-4 w-4 sm:h-5 sm:w-5" />
                 Profil
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs sm:text-sm">
                 Modifiez vos informations personnelles
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Nom complet</Label>
@@ -175,16 +175,16 @@ const Settings = () => {
 
           {/* Changement de mot de passe */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="h-5 w-5" />
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
                 Changer le mot de passe
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs sm:text-sm">
                 Mettez à jour votre mot de passe pour sécuriser votre compte
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <form onSubmit={handleUpdatePassword} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="newPassword">Nouveau mot de passe</Label>
@@ -255,18 +255,18 @@ const Settings = () => {
 
           {/* Suppression de compte */}
           <Card className="border-destructive/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-destructive">
-                <Trash2 className="h-5 w-5" />
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-destructive text-base sm:text-lg">
+                <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                 Supprimer le compte
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs sm:text-sm">
                 Cette action est irréversible. Toutes vos données seront supprimées.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <div className="space-y-4">
-                <div className="p-4 bg-destructive/10 rounded-lg text-sm text-destructive">
+                <div className="p-3 sm:p-4 bg-destructive/10 rounded-lg text-xs sm:text-sm text-destructive">
                   <p className="font-medium mb-2">Attention :</p>
                   <ul className="list-disc list-inside space-y-1">
                     <li>Tous vos projets seront supprimés</li>

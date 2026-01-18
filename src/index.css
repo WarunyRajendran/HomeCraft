@@ -333,6 +333,15 @@
     animation: scaleIn 0.3s ease-out;
   }
 
+  /* Safe area pour les navigateurs mobiles */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   /* Hover effects */
   .hover-lift {
     transition: transform 0.3s ease, box-shadow 0.3s ease;

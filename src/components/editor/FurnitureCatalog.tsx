@@ -97,7 +97,7 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
       </div>
 
       {/* Furniture list */}
-      <div className="flex-1 p-2 md:p-4 overflow-y-auto">
+      <div className="flex-1 p-2 md:p-4 pb-20 overflow-y-auto overscroll-contain touch-pan-y">
         {furnitureLoading ? (
           <div className="flex items-center justify-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>

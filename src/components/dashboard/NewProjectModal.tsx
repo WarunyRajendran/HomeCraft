@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { X, Upload, Image, Camera } from "lucide-react";
+import { X, Image, Camera } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateProject } from "@/hooks/useProjects";
 import { useAuth } from "@/hooks/useAuth";
@@ -103,7 +103,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -111,15 +111,15 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
       />
 
       {/* Modal */}
-      <Card className="relative z-10 w-full max-w-lg mx-4 shadow-xl">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <h2 className="text-xl font-semibold">Nouveau Projet</h2>
-          <Button variant="ghost" size="icon" onClick={handleClose}>
-            <X className="h-5 w-5" />
+      <Card className="relative z-10 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
+        <CardHeader className="flex flex-row items-center justify-between pb-2 px-4 sm:px-6 pt-4 sm:pt-6 sticky top-0 bg-card z-10">
+          <h2 className="text-lg sm:text-xl font-semibold">Nouveau Projet</h2>
+          <Button variant="ghost" size="icon" onClick={handleClose} className="h-8 w-8 sm:h-9 sm:w-9">
+            <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6 pb-4 sm:pb-6">
           {/* Nom du projet */}
           <div className="space-y-2">
             <Label htmlFor="projectName">Nom du projet</Label>
@@ -134,32 +134,32 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 
           {/* Upload d'image */}
           <div className="space-y-2">
-            <Label>Photo de la pièce</Label>
+            <Label className="text-sm">Photo de la pièce</Label>
             {backgroundImage ? (
               <div className="relative rounded-lg overflow-hidden">
                 <img
                   src={backgroundImage}
                   alt="Aperçu"
-                  className="w-full h-48 object-cover"
+                  className="w-full h-36 sm:h-48 object-cover"
                 />
                 <Button
                   variant="destructive"
                   size="icon"
-                  className="absolute top-2 right-2"
+                  className="absolute top-2 right-2 h-7 w-7 sm:h-8 sm:w-8"
                   onClick={() => setBackgroundImage(null)}
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Button>
-                <div className="absolute bottom-2 left-2 flex items-center gap-2 bg-black/60 text-white px-3 py-1.5 rounded-md text-sm">
-                  <Image className="h-4 w-4" />
+                <div className="absolute bottom-2 left-2 flex items-center gap-1.5 sm:gap-2 bg-black/60 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm">
+                  <Image className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Photo importée
                 </div>
               </div>
             ) : (
               <div
                 className={`
-                  flex flex-col items-center justify-center gap-4 p-8 border-2 border-dashed rounded-lg
-                  transition-colors cursor-pointer h-48
+                  flex flex-col items-center justify-center gap-3 sm:gap-4 p-6 sm:p-8 border-2 border-dashed rounded-lg
+                  transition-colors cursor-pointer h-36 sm:h-48
                   ${isDragOver
                     ? "border-primary bg-primary/5"
                     : "border-border hover:border-primary/50"
@@ -170,14 +170,14 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
               >
-                <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
-                  <Camera className="h-7 w-7 text-muted-foreground" />
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-muted flex items-center justify-center">
+                  <Camera className="h-5 w-5 sm:h-7 sm:w-7 text-muted-foreground" />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-xs sm:text-sm font-medium text-foreground">
                     Cliquez pour importer une photo
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1 hidden sm:block">
                     ou glissez-déposez votre image ici
                   </p>
                 </div>
@@ -193,12 +193,12 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
           </div>
 
           {/* Boutons */}
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" className="flex-1" onClick={handleClose}>
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-2">
+            <Button variant="outline" className="flex-1 h-10 sm:h-11 text-sm" onClick={handleClose}>
               Annuler
             </Button>
             <Button
-              className="flex-1"
+              className="flex-1 h-10 sm:h-11 text-sm"
               onClick={handleCreate}
               disabled={isCreating || !projectName.trim() || !backgroundImage}
             >

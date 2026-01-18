@@ -178,34 +178,36 @@ const Editor = () => {
   return (
     <div className="h-screen flex flex-col bg-muted">
       {/* Header */}
-      <header className="flex items-center justify-between px-2 md:px-4 py-2 bg-background border-b border-border">
-        <div className="flex items-center gap-2 md:gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-            <ArrowLeft className="h-5 w-5" />
+      <header className="flex items-center justify-between px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-background border-b border-border">
+        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="h-8 w-8 sm:h-9 sm:w-9">
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
-          <div className="flex items-center gap-2">
-            <Box className="h-5 w-5 text-primary" />
-            <span className="font-semibold text-foreground hidden sm:inline">HomeCraft</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Box className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="font-semibold text-sm sm:text-base text-foreground hidden sm:inline">HomeCraft</span>
           </div>
           <span className="text-muted-foreground hidden md:inline">|</span>
-          <span className="text-sm text-muted-foreground hidden md:inline">Éditeur Photo</span>
+          <span className="text-xs sm:text-sm text-muted-foreground hidden md:inline">Éditeur Photo</span>
         </div>
 
         <Button
           variant="outline"
           size="sm"
           onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-          className="text-xs md:text-sm"
+          className="text-xs h-8 sm:h-9 px-2 sm:px-3"
         >
           {isCatalogOpen ? (
             <>
-              <PanelRightClose className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Masquer le catalogue</span>
+              <PanelRightClose className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1 md:mr-2" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Masquer</span>
+              <span className="hidden lg:inline text-xs sm:text-sm ml-1">le catalogue</span>
             </>
           ) : (
             <>
-              <PanelRightOpen className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Afficher le catalogue</span>
+              <PanelRightOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1 md:mr-2" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Afficher</span>
+              <span className="hidden lg:inline text-xs sm:text-sm ml-1">le catalogue</span>
             </>
           )}
         </Button>
@@ -227,7 +229,7 @@ const Editor = () => {
       {/* Main content */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
         {/* Photo Scene */}
-        <div className="h-[45vh] md:h-auto md:flex-1 p-2 md:p-4 shrink-0 md:shrink min-w-0">
+        <div className="h-[40vh] sm:h-[45vh] md:h-auto md:flex-1 p-1.5 sm:p-2 md:p-4 shrink-0 md:shrink min-w-0">
           <PhotoScene
             backgroundImage={backgroundImage}
             furniture={furniture}
@@ -239,13 +241,13 @@ const Editor = () => {
 
         {/* Catalog sidebar */}
         <aside
-          className={`md:shrink-0 border-t md:border-t-0 md:border-l border-border overflow-hidden self-stretch transition-all duration-300 ease-in-out ${
+          className={`md:shrink-0 border-t md:border-t-0 md:border-l border-border overflow-hidden self-stretch will-change-[max-height,width,opacity] transition-[max-height,width,opacity] duration-300 ease-in-out ${
             isCatalogOpen
-              ? 'w-full md:w-80 min-h-[300px] md:min-h-0 flex-1 md:flex-none opacity-100'
-              : 'w-0 min-h-0 flex-none opacity-0 border-0'
+              ? 'max-h-[50vh] md:max-h-none w-full md:w-72 lg:w-80 flex-1 md:flex-none opacity-100'
+              : 'max-h-0 md:max-h-none md:w-0 flex-none opacity-0'
           }`}
         >
-          <div className="w-full md:w-80 h-full overflow-auto">
+          <div className="w-full md:w-72 lg:w-80 h-full min-h-[250px] sm:min-h-[300px] md:min-h-0 overflow-auto">
             <FurnitureCatalog onAddFurniture={handleAddFurniture} />
           </div>
         </aside>

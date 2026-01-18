@@ -30,9 +30,7 @@ const Header = () => {
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl gradient-gold flex items-center justify-center">
               <Box className="w-5 h-5 md:w-6 md:h-6 text-accent-foreground" />
             </div>
-            <span className={`font-display text-xl md:text-2xl font-bold transition-colors ${
-              isScrolled ? "text-foreground" : "text-primary-foreground"
-            }`}>
+            <span className="font-display text-xl md:text-2xl font-bold text-black">
               HomeCraft
             </span>
           </Link>
@@ -85,8 +83,9 @@ const Header = () => {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 -mr-2 rounded-lg hover:bg-primary-foreground/10 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Menu"
           >
             {isMobileMenuOpen ? (
               <X className={`w-6 h-6 ${isScrolled ? "text-foreground" : "text-primary-foreground"}`} />
@@ -98,33 +97,35 @@ const Header = () => {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-card border-t border-border/50 py-4">
-            <nav className="flex flex-col gap-2">
+          <div className="md:hidden bg-card border-t border-border/50 py-3 sm:py-4">
+            <nav className="flex flex-col gap-1">
               <a
                 href="#features"
-                className="text-foreground hover:text-accent px-4 py-2 text-sm font-medium"
+                className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Fonctionnalités
               </a>
               <a
                 href="#"
-                className="text-foreground hover:text-accent px-4 py-2 text-sm font-medium"
+                className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Partenaires
               </a>
               <a
                 href="#"
-                className="text-foreground hover:text-accent px-4 py-2 text-sm font-medium"
+                className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Tarifs
               </a>
-              <div className="flex flex-col gap-2 px-4 pt-4 border-t border-border/50 mt-2">
-                <Button asChild variant="outline" className="w-full">
-                  <Link to="/auth">Connexion</Link>
+              <div className="flex flex-col gap-2 px-4 pt-3 border-t border-border/50 mt-2">
+                <Button asChild variant="outline" className="w-full h-11">
+                  <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>Connexion</Link>
                 </Button>
-                <Button asChild className="w-full gradient-gold text-accent-foreground">
-                  <Link to="/auth?tab=signup">Commencer</Link>
+                <Button asChild className="w-full gradient-gold text-accent-foreground h-11">
+                  <Link to="/auth?tab=signup" onClick={() => setIsMobileMenuOpen(false)}>Commencer</Link>
                 </Button>
               </div>
             </nav>

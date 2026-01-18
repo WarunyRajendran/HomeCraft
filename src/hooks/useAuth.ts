@@ -10,10 +10,15 @@ export const useAuth = () => {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error getting session:', error);
+        setLoading(false);
+      });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -56,5 +61,17 @@ export const useSignIn = () => {
 export const useSignOut = () => {
   return useMutation({
     mutationFn: authService.signOut,
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: (email: string) => authService.resetPasswordForEmail(email),
+  });
+};
+
+export const useUpdatePassword = () => {
+  return useMutation({
+    mutationFn: (newPassword: string) => authService.updatePassword(newPassword),
   });
 };

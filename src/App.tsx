@@ -5,10 +5,12 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { AuthListener } from "./components/auth/AuthListener";
 import { AdminRoute } from "./components/auth/AdminRoute";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Editor from "./pages/Editor";
 import Settings from "./pages/Settings";
@@ -41,9 +43,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AuthListener />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
           <Route path="/editor/:projectId" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
