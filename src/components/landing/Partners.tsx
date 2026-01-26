@@ -47,7 +47,7 @@ const Partners = () => {
         {/* CTA */}
         <p className="text-center mt-10 text-muted-foreground">
           Vous êtes une enseigne ?{" "}
-          <a href="mailto:partenaires@roomviz.fr" className="text-accent hover:underline font-medium">
+          <a href="mailto:partenaires@homecraft.fr" className="text-accent hover:underline font-medium">
             Devenez partenaire
           </a>
         </p>

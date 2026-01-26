@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Room3D } from "./Room3D";
@@ -18,20 +18,27 @@ interface Scene3DProps {
   };
 }
 
+interface SceneContentProps extends Scene3DProps {
+  isDragging: boolean;
+  onDragChange: (isDragging: boolean) => void;
+}
+
 const SceneContent = ({
   placements,
   selectedId,
   onSelectFurniture,
   onPositionChange,
   roomDimensions,
-}: Scene3DProps) => {
+  isDragging,
+  onDragChange,
+}: SceneContentProps) => {
   // Create a floor plane for raycasting during drag
   const floorPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), []);
 
   return (
     <>
       <PerspectiveCamera makeDefault position={[8, 6, 8]} fov={50} />
-      
+
       {/* Lighting */}
       <ambientLight intensity={0.4} />
       <directionalLight
@@ -43,10 +50,10 @@ const SceneContent = ({
       <pointLight position={[-5, 5, -5]} intensity={0.5} />
 
       {/* Room */}
-      <Room3D 
-        width={roomDimensions.width} 
-        depth={roomDimensions.depth} 
-        height={roomDimensions.height} 
+      <Room3D
+        width={roomDimensions.width}
+        depth={roomDimensions.depth}
+        height={roomDimensions.height}
       />
 
       {/* Furniture */}
@@ -58,12 +65,13 @@ const SceneContent = ({
           onSelect={onSelectFurniture}
           onPositionChange={onPositionChange}
           floorPlane={floorPlane}
+          onDragChange={onDragChange}
         />
       ))}
 
       {/* Click on empty space to deselect */}
-      <mesh 
-        position={[0, -0.01, 0]} 
+      <mesh
+        position={[0, -0.01, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         onPointerDown={() => onSelectFurniture(null)}
       >
@@ -71,9 +79,10 @@ const SceneContent = ({
         <meshBasicMaterial visible={false} />
       </mesh>
 
-      {/* Controls */}
+      {/* Controls - disabled during furniture drag */}
       <OrbitControls
         makeDefault
+        enabled={!isDragging}
         minPolarAngle={0}
         maxPolarAngle={Math.PI / 2.1}
         minDistance={3}
@@ -87,10 +96,16 @@ const SceneContent = ({
 };
 
 export const Scene3D = (props: Scene3DProps) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragChange = useCallback((dragging: boolean) => {
+    setIsDragging(dragging);
+  }, []);
+
   return (
     <div className="w-full h-full bg-gradient-to-b from-slate-100 to-slate-200 rounded-lg overflow-hidden">
       <Canvas shadows>
-        <SceneContent {...props} />
+        <SceneContent {...props} isDragging={isDragging} onDragChange={handleDragChange} />
       </Canvas>
     </div>
   );
