@@ -159,7 +159,7 @@ const Settings = () => {
                   </p>
                 </div>
 
-                <Button type="submit" disabled={isUpdatingProfile}>
+                <Button type="submit" disabled={isUpdatingProfile} className="gradient-gold text-accent-foreground hover:opacity-90">
                   {isUpdatingProfile ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -239,7 +239,7 @@ const Settings = () => {
                   </p>
                 </div>
 
-                <Button type="submit" disabled={isUpdatingPassword || !newPassword || !confirmPassword}>
+                <Button type="submit" disabled={isUpdatingPassword || !newPassword || !confirmPassword} className="gradient-gold text-accent-foreground hover:opacity-90">
                   {isUpdatingPassword ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />

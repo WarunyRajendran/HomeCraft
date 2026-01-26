@@ -13,7 +13,9 @@ export const ImageUploader = ({ onImageUpload, currentImage, onRemoveImage }: Im
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFileChange = (file: File) => {
-    if (file && file.type.startsWith("image/")) {
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+
+    if (file && allowedTypes.includes(file.type)) {
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target?.result) {
@@ -81,11 +83,12 @@ export const ImageUploader = ({ onImageUpload, currentImage, onRemoveImage }: Im
       <div className="text-sm">
         <span className="text-foreground font-medium">Importer une photo</span>
         <span className="text-muted-foreground"> ou glisser-déposer</span>
+        <p className="text-xs text-muted-foreground mt-1">PNG ou JPEG uniquement</p>
       </div>
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/png, image/jpeg"
         className="hidden"
         onChange={handleInputChange}
       />

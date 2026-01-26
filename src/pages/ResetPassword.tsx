@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Box, Mail, Lock, ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -81,10 +81,10 @@ const ResetPassword = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen gradient-hero flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary-foreground" />
-          <p className="mt-4 text-primary-foreground/80">Vérification du lien...</p>
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-foreground" />
+          <p className="mt-4 text-muted-foreground">Vérification du lien...</p>
         </div>
       </div>
     );
@@ -95,18 +95,12 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="min-h-screen gradient-hero flex items-center justify-center p-3 sm:p-4">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-48 sm:w-72 h-48 sm:h-72 bg-accent/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-64 sm:w-96 h-64 sm:h-96 bg-sage/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-      </div>
-
-      <div className="relative z-10 w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-md">
         {/* Back link */}
         <Link
           to="/auth"
-          className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4" />
           Retour à la connexion
@@ -118,9 +112,6 @@ const ResetPassword = () => {
               <Box className="w-6 h-6 sm:w-8 sm:h-8 text-accent-foreground" />
             </div>
             <CardTitle className="font-display text-xl sm:text-2xl">Nouveau mot de passe</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Confirmez votre email et choisissez un nouveau mot de passe
-            </CardDescription>
           </CardHeader>
 
           <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">

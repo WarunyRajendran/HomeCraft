@@ -14,6 +14,7 @@ interface FurnitureCatalogProps {
     name: string;
     color: string;
     imageUrl: string | null;
+    modelUrl: string | null;
     dimensions: { width: number; height: number; depth: number };
   }) => void;
 }
@@ -112,6 +113,7 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
                   name: item.name,
                   color: item.color || '#6B7280',
                   imageUrl: item.image_url,
+                  modelUrl: item.model_url,
                   dimensions: {
                     width: item.width ?? 1,
                     height: item.height ?? 1,
@@ -148,12 +150,22 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
                   }}
                 >
                   <CardContent className="p-2 md:p-3 flex items-center gap-2 md:gap-3">
-                    <div
-                      className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: (item.color || '#6B7280') + '20' }}
-                    >
-                      <Icon className="h-5 w-5 md:h-6 md:w-6" style={{ color: item.color || '#6B7280' }} />
-                    </div>
+                    {item.image_url ? (
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden shrink-0 bg-muted">
+                        <img
+                          src={item.image_url}
+                          alt={item.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: (item.color || '#6B7280') + '20' }}
+                      >
+                        <Icon className="h-5 w-5 md:h-6 md:w-6" style={{ color: item.color || '#6B7280' }} />
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-xs md:text-sm text-foreground truncate">{item.name}</p>
                       <p className="text-xs text-muted-foreground hidden md:block">

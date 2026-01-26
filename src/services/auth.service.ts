@@ -83,20 +83,27 @@ export const authService = {
   deleteAccount: async (_userId: string) => {
     // Appeler l'Edge Function qui supprime complètement l'utilisateur
     // (projets, profil, et entrée auth.users)
-    const { data: { session } } = await supabase.auth.getSession();
 
-    if (!session?.access_token) {
-      throw new Error('Session non trouvée');
+    // Rafraîchir la session pour avoir un token valide
+    const { data: { session }, error: sessionError } = await supabase.auth.refreshSession();
+
+    if (sessionError || !session) {
+      console.error('Session refresh error:', sessionError);
+      throw new Error('Session expirée, veuillez vous reconnecter');
     }
 
-    const response = await supabase.functions.invoke('delete-user', {
+    console.log('Token refreshed, calling delete-user function...');
+
+    const { data, error } = await supabase.functions.invoke('delete-user', {
       headers: {
         Authorization: `Bearer ${session.access_token}`,
       },
     });
 
-    if (response.error) {
-      throw new Error(response.error.message || 'Erreur lors de la suppression du compte');
+    if (error) {
+      console.error('Delete account error:', error, data);
+      const errorMessage = data?.error || error.message || 'Erreur lors de la suppression du compte';
+      throw new Error(errorMessage);
     }
 
     // La session est automatiquement invalidée côté serveur

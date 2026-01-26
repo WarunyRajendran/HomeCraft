@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search, Upload, ImageIcon, X, Check } from 'lucide-react';
+import { Search, Upload, X, Check, Box } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -12,7 +12,7 @@ interface Furniture {
   id: string;
   name: string;
   color: string | null;
-  image_url: string | null;
+  model_url: string | null;
   price: number | null;
   width: number | null;
   height: number | null;
@@ -23,8 +23,8 @@ interface Furniture {
 
 const AdminFurniture = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [uploadingId, setUploadingId] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingModelId, setUploadingModelId] = useState<string | null>(null);
+  const modelInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
   // Récupérer tous les meubles
@@ -37,7 +37,7 @@ const AdminFurniture = () => {
           id,
           name,
           color,
-          image_url,
+          model_url,
           price,
           width,
           height,
@@ -52,97 +52,105 @@ const AdminFurniture = () => {
     },
   });
 
-  // Mutation pour uploader l'image
-  const uploadImage = useMutation({
-    mutationFn: async ({ furnitureId, file, oldImageUrl }: { furnitureId: string; file: File; oldImageUrl: string | null }) => {
-      // Supprimer l'ancienne image si elle existe
-      if (oldImageUrl) {
-        const oldPath = oldImageUrl.split('/furniture-images/')[1];
+  // Mutation pour uploader le modèle 3D
+  const uploadModel = useMutation({
+    mutationFn: async ({ furnitureId, file, oldModelUrl }: { furnitureId: string; file: File; oldModelUrl: string | null }) => {
+      // Supprimer l'ancien modèle si il existe
+      if (oldModelUrl) {
+        const oldPath = oldModelUrl.split('/furniture-models/')[1]?.split('?')[0];
         if (oldPath) {
-          await supabase.storage.from('furniture-images').remove([oldPath]);
+          await supabase.storage.from('furniture-models').remove([oldPath]);
         }
       }
 
       // Nom de fichier fixe basé sur l'ID du meuble
-      const fileExt = file.name.split('.').pop();
-      const fileName = `furniture/${furnitureId}.${fileExt}`;
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const fileName = `${furnitureId}.${fileExt}`;
 
       // Upload dans Supabase Storage (upsert pour écraser si même nom)
       const { error: uploadError } = await supabase.storage
-        .from('furniture-images')
+        .from('furniture-models')
         .upload(fileName, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
       // Récupérer l'URL publique (ajouter timestamp pour éviter le cache)
       const { data: urlData } = supabase.storage
-        .from('furniture-images')
+        .from('furniture-models')
         .getPublicUrl(fileName);
 
-      const imageUrlWithCacheBust = `${urlData.publicUrl}?t=${Date.now()}`;
+      const modelUrlWithCacheBust = `${urlData.publicUrl}?t=${Date.now()}`;
 
       // Mettre à jour la table furniture
       const { error: updateError } = await supabase
         .from('furniture')
-        .update({ image_url: imageUrlWithCacheBust })
+        .update({ model_url: modelUrlWithCacheBust })
         .eq('id', furnitureId);
 
       if (updateError) throw updateError;
 
-      return imageUrlWithCacheBust;
+      return modelUrlWithCacheBust;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-furniture'] });
-      toast.success('Image mise à jour');
-      setUploadingId(null);
+      toast.success('Modèle 3D mis à jour');
+      setUploadingModelId(null);
     },
     onError: (error) => {
-      console.error('Upload error:', error);
-      toast.error('Erreur lors de l\'upload');
-      setUploadingId(null);
+      console.error('Upload model error:', error);
+      toast.error('Erreur lors de l\'upload du modèle 3D');
+      setUploadingModelId(null);
     },
   });
 
-  // Mutation pour supprimer l'image
-  const removeImage = useMutation({
+  // Mutation pour supprimer le modèle 3D
+  const removeModel = useMutation({
     mutationFn: async (furnitureId: string) => {
       const { error } = await supabase
         .from('furniture')
-        .update({ image_url: null })
+        .update({ model_url: null })
         .eq('id', furnitureId);
 
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-furniture'] });
-      toast.success('Image supprimée');
+      toast.success('Modèle 3D supprimé');
     },
     onError: () => {
       toast.error('Erreur lors de la suppression');
     },
   });
 
-  const selectedFurnitureRef = useRef<{ furnitureId: string; oldImageUrl: string | null } | null>(null);
+  const selectedModelRef = useRef<{ furnitureId: string; oldModelUrl: string | null } | null>(null);
 
-  const handleFileSelect = (furnitureId: string, oldImageUrl: string | null) => {
-    setUploadingId(furnitureId);
-    // Stocker l'ancienne URL pour la suppression
-    selectedFurnitureRef.current = { furnitureId, oldImageUrl };
-    fileInputRef.current?.click();
+  const handleModelSelect = (furnitureId: string, oldModelUrl: string | null) => {
+    setUploadingModelId(furnitureId);
+    selectedModelRef.current = { furnitureId, oldModelUrl };
+    modelInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && selectedFurnitureRef.current) {
-      uploadImage.mutate({
-        furnitureId: selectedFurnitureRef.current.furnitureId,
+    const allowedExtensions = ['.glb', '.gltf'];
+    const fileExt = file?.name.toLowerCase().slice(file.name.lastIndexOf('.'));
+
+    if (file && !allowedExtensions.includes(fileExt || '')) {
+      toast.error('Format non supporté. Utilisez GLB ou GLTF.');
+      setUploadingModelId(null);
+      return;
+    }
+
+    if (file && selectedModelRef.current) {
+      uploadModel.mutate({
+        furnitureId: selectedModelRef.current.furnitureId,
         file,
-        oldImageUrl: selectedFurnitureRef.current.oldImageUrl,
+        oldModelUrl: selectedModelRef.current.oldModelUrl,
       });
     }
     // Reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    if (modelInputRef.current) {
+      modelInputRef.current.value = '';
     }
   };
 
@@ -157,7 +165,7 @@ const AdminFurniture = () => {
     <div className="p-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-foreground">Gestion des Meubles</h1>
-        <p className="text-muted-foreground">Ajoutez des images aux meubles du catalogue</p>
+        <p className="text-muted-foreground">Ajoutez des modèles 3D aux meubles du catalogue</p>
       </div>
 
       {/* Search */}
@@ -172,27 +180,27 @@ const AdminFurniture = () => {
       </div>
 
       {/* Stats */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6">
         <Badge variant="outline" className="text-sm">
           {furniture?.length ?? 0} meubles au total
         </Badge>
-        <Badge variant="default" className="text-sm">
+        <Badge variant="default" className="text-sm bg-purple-600">
           <Check className="h-3 w-3 mr-1" />
-          {furniture?.filter(f => f.image_url).length ?? 0} avec image
+          {furniture?.filter(f => f.model_url).length ?? 0} avec modèle 3D
         </Badge>
         <Badge variant="secondary" className="text-sm">
-          <ImageIcon className="h-3 w-3 mr-1" />
-          {furniture?.filter(f => !f.image_url).length ?? 0} sans image
+          <Box className="h-3 w-3 mr-1" />
+          {furniture?.filter(f => !f.model_url).length ?? 0} sans modèle 3D
         </Badge>
       </div>
 
-      {/* Hidden file input */}
+      {/* Hidden file input for 3D models */}
       <input
-        ref={fileInputRef}
+        ref={modelInputRef}
         type="file"
-        accept="image/*"
+        accept=".glb,.gltf"
         className="hidden"
-        onChange={handleFileChange}
+        onChange={handleModelChange}
       />
 
       {/* Furniture grid */}
@@ -200,7 +208,7 @@ const AdminFurniture = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <div className="h-40 bg-muted"></div>
+              <div className="h-32 bg-muted"></div>
               <CardContent className="p-4">
                 <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
                 <div className="h-3 bg-muted rounded w-1/2"></div>
@@ -212,33 +220,24 @@ const AdminFurniture = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredFurniture?.map((item) => (
             <Card key={item.id} className="overflow-hidden">
-              {/* Image area */}
-              <div className="relative h-40 bg-muted flex items-center justify-center">
-                {item.image_url ? (
-                  <>
-                    <img
-                      src={item.image_url}
-                      alt={item.name}
-                      className="w-full h-full object-contain p-2"
-                    />
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-2 right-2 h-8 w-8"
-                      onClick={() => removeImage.mutate(item.id)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </>
-                ) : (
-                  <div className="text-center">
-                    <div
-                      className="w-16 h-16 rounded-lg mx-auto mb-2 flex items-center justify-center"
-                      style={{ backgroundColor: (item.color || '#6B7280') + '30' }}
-                    >
-                      <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                    <p className="text-xs text-muted-foreground">Pas d'image</p>
+              {/* Color preview area */}
+              <div className="relative h-32 bg-muted flex items-center justify-center">
+                <div
+                  className="w-20 h-20 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: (item.color || '#6B7280') + '40' }}
+                >
+                  <Box
+                    className="h-10 w-10"
+                    style={{ color: item.color || '#6B7280' }}
+                  />
+                </div>
+                {/* 3D Model indicator */}
+                {item.model_url && (
+                  <div className="absolute top-2 left-2">
+                    <Badge className="bg-purple-600 text-white text-xs">
+                      <Check className="h-3 w-3 mr-1" />
+                      3D
+                    </Badge>
                   </div>
                 )}
               </div>
@@ -261,25 +260,39 @@ const AdminFurniture = () => {
                     <span>• {item.width}×{item.depth}×{item.height}m</span>
                   )}
                 </div>
-                <Button
-                  variant={item.image_url ? 'outline' : 'default'}
-                  size="sm"
-                  className="w-full"
-                  onClick={() => handleFileSelect(item.id, item.image_url)}
-                  disabled={uploadImage.isPending && uploadingId === item.id}
-                >
-                  {uploadImage.isPending && uploadingId === item.id ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2" />
-                      Upload...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="h-4 w-4 mr-2" />
-                      {item.image_url ? 'Changer l\'image' : 'Ajouter une image'}
-                    </>
+
+                {/* 3D Model Button */}
+                <div className="flex gap-2">
+                  <Button
+                    variant={item.model_url ? 'outline' : 'default'}
+                    size="sm"
+                    className={`flex-1 ${!item.model_url ? 'bg-purple-600 hover:bg-purple-700 text-white' : ''}`}
+                    onClick={() => handleModelSelect(item.id, item.model_url)}
+                    disabled={uploadModel.isPending && uploadingModelId === item.id}
+                  >
+                    {uploadModel.isPending && uploadingModelId === item.id ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2" />
+                        Upload...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        {item.model_url ? 'Changer le modèle 3D' : 'Ajouter modèle 3D'}
+                      </>
+                    )}
+                  </Button>
+                  {item.model_url && (
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeModel.mutate(item.id)}
+                      disabled={removeModel.isPending}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
                   )}
-                </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -288,7 +301,7 @@ const AdminFurniture = () => {
 
       {filteredFurniture?.length === 0 && !isLoading && (
         <div className="text-center py-12">
-          <ImageIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <Box className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground">Aucun meuble trouvé</p>
         </div>
       )}

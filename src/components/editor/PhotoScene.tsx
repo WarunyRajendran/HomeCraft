@@ -25,6 +25,10 @@ interface PhotoSceneProps {
   onUpdateFurniture: (id: string, updates: Partial<FurnitureItem2D>) => void;
 }
 
+// Taille fixe du canvas virtuel (système de coordonnées)
+const CANVAS_WIDTH = 10;
+const CANVAS_HEIGHT = 7.5; // Ratio 4:3
+
 interface DraggableFurnitureProps {
   item: FurnitureItem2D;
   isSelected: boolean;
@@ -277,22 +281,20 @@ const BackgroundImage = ({ url }: { url: string }) => {
     return loadedTexture;
   }, [url]);
 
-  const { viewport } = useThree();
+  // Calculer les dimensions pour préserver le ratio d'aspect (cover) avec le canvas fixe
+  const canvasAspect = CANVAS_WIDTH / CANVAS_HEIGHT;
 
-  // Calculer les dimensions pour préserver le ratio d'aspect (cover)
-  const viewportAspect = viewport.width / viewport.height;
+  let width = CANVAS_WIDTH;
+  let height = CANVAS_HEIGHT;
 
-  let width = viewport.width;
-  let height = viewport.height;
-
-  if (imageAspect > viewportAspect) {
+  if (imageAspect > canvasAspect) {
     // L'image est plus large proportionnellement
-    width = viewport.height * imageAspect;
-    height = viewport.height;
+    width = CANVAS_HEIGHT * imageAspect;
+    height = CANVAS_HEIGHT;
   } else {
     // L'image est plus haute proportionnellement
-    width = viewport.width;
-    height = viewport.width / imageAspect;
+    width = CANVAS_WIDTH;
+    height = CANVAS_WIDTH / imageAspect;
   }
 
   return (
@@ -310,14 +312,17 @@ const SceneContent = ({
   onSelectFurniture,
   onUpdateFurniture,
 }: PhotoSceneProps) => {
-  const { viewport } = useThree();
-
   return (
     <>
       <OrthographicCamera
         makeDefault
         position={[0, 0, 5]}
-        zoom={100}
+        left={-CANVAS_WIDTH / 2}
+        right={CANVAS_WIDTH / 2}
+        top={CANVAS_HEIGHT / 2}
+        bottom={-CANVAS_HEIGHT / 2}
+        near={0.1}
+        far={100}
       />
 
       {/* Lighting for 3D-like furniture */}
@@ -331,7 +336,7 @@ const SceneContent = ({
       {/* Background color when no image */}
       {!backgroundImage && (
         <mesh position={[0, 0, -0.2]} raycast={() => null}>
-          <planeGeometry args={[viewport.width, viewport.height]} />
+          <planeGeometry args={[CANVAS_WIDTH, CANVAS_HEIGHT]} />
           <meshBasicMaterial color="#f1f5f9" />
         </mesh>
       )}
@@ -344,7 +349,7 @@ const SceneContent = ({
           isSelected={selectedId === item.id}
           onSelect={() => onSelectFurniture(item.id)}
           onUpdate={(updates) => onUpdateFurniture(item.id, updates)}
-          viewportSize={{ width: viewport.width, height: viewport.height }}
+          viewportSize={{ width: CANVAS_WIDTH, height: CANVAS_HEIGHT }}
         />
       ))}
     </>

@@ -17,6 +17,8 @@ Deno.serve(async (req) => {
   try {
     // Récupérer le token d'autorisation
     const authHeader = req.headers.get('Authorization')
+    console.log('Auth header present:', !!authHeader)
+
     if (!authHeader) {
       return new Response(
         JSON.stringify({ error: 'Token manquant' }),
@@ -29,16 +31,21 @@ Deno.serve(async (req) => {
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
+    // Extraire le token du header Bearer
+    const token = authHeader.replace('Bearer ', '')
+
     // Client pour vérifier l'utilisateur authentifié
     const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } }
+      global: { headers: { Authorization: `Bearer ${token}` } }
     })
 
     // Vérifier l'utilisateur connecté
     const { data: { user }, error: userError } = await supabaseUser.auth.getUser()
+    console.log('User check:', user?.id, 'Error:', userError?.message)
+
     if (userError || !user) {
       return new Response(
-        JSON.stringify({ error: 'Utilisateur non authentifié' }),
+        JSON.stringify({ error: 'Utilisateur non authentifié', details: userError?.message }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

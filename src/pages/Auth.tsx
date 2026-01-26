@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Box, Mail, Lock, User, ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
+import { Box, Mail, Lock, User, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 import { useAuth, useSignIn, useSignUp, useResetPassword } from "@/hooks/useAuth";
 import { PasswordSchema } from "@/lib/validation";
+import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -37,9 +37,27 @@ const Auth = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
 
-  // Check if already logged in
+  // Track if we're in password recovery mode (to prevent redirect to dashboard)
+  const isRecoveryMode = useRef(false);
+
+  // Listen for PASSWORD_RECOVERY event to prevent redirect
   useEffect(() => {
-    if (user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        isRecoveryMode.current = true;
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Check if already logged in (but not during password recovery)
+  useEffect(() => {
+    // Don't redirect if this is a password recovery session
+    const hash = window.location.hash;
+    const isRecoveryFlow = hash.includes("type=recovery") || isRecoveryMode.current;
+
+    if (user && !isRecoveryFlow) {
       navigate("/dashboard");
     }
   }, [user, navigate]);
@@ -73,6 +91,9 @@ const Auth = () => {
       toast.success("Un email de réinitialisation a été envoyé. Vérifiez votre boîte de réception.");
       setShowForgotPassword(false);
       setForgotPasswordEmail("");
+      // Clear login fields to avoid confusion
+      setLoginEmail("");
+      setLoginPassword("");
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Une erreur s'est produite";
       toast.error(message);
@@ -109,15 +130,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-hero flex items-center justify-center p-3 sm:p-4">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-48 sm:w-72 h-48 sm:h-72 bg-accent/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-64 sm:w-96 h-64 sm:h-96 bg-sage/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-      </div>
-
-      <div className="relative z-10 w-full max-w-md">
-        {/* Back link */}
+    <div className="min-h-screen bg-background flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-md">
+        {/* Back link - commenté car pas de page d'accueil publique pour le moment
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
@@ -125,6 +140,7 @@ const Auth = () => {
           <ArrowLeft className="w-4 h-4" />
           Retour à l'accueil
         </Link>
+        */}
 
         <Card className="shadow-elegant border-border/50">
           <CardHeader className="text-center pb-2 px-4 sm:px-6 pt-4 sm:pt-6">

@@ -10,6 +10,7 @@ import { useUserProjects, useDeleteProject } from "@/hooks/useProjects";
 import { authService } from "@/services/auth.service";
 import { sanitizeImageUrl } from "@/lib/validation";
 import { NewProjectModal } from "@/components/dashboard/NewProjectModal";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,6 +21,11 @@ const Dashboard = () => {
   const deleteProject = useDeleteProject();
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [deleteModalState, setDeleteModalState] = useState<{ isOpen: boolean; projectId: string; projectName: string }>({
+    isOpen: false,
+    projectId: "",
+    projectName: "",
+  });
 
   const handleLogout = async () => {
     try {
@@ -31,14 +37,21 @@ const Dashboard = () => {
     }
   };
 
-  const handleDelete = async (projectId: string, projectName: string) => {
-    if (confirm(`Supprimer le projet "${projectName}" ?`)) {
-      try {
-        await deleteProject.mutateAsync(projectId);
-        toast.success("Projet supprimé");
-      } catch {
-        toast.error("Erreur lors de la suppression");
-      }
+  const openDeleteModal = (projectId: string, projectName: string) => {
+    setDeleteModalState({ isOpen: true, projectId, projectName });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalState({ isOpen: false, projectId: "", projectName: "" });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteProject.mutateAsync(deleteModalState.projectId);
+      toast.success("Projet supprimé");
+      closeDeleteModal();
+    } catch {
+      toast.error("Erreur lors de la suppression");
     }
   };
 
@@ -49,6 +62,16 @@ const Dashboard = () => {
         <div className="container mx-auto px-3 sm:px-4">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center gap-2">
+              {/* Mobile Menu Button - à gauche */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </Button>
+
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl gradient-gold flex items-center justify-center">
                 <Box className="w-4 h-4 sm:w-5 sm:h-5 text-accent-foreground" />
               </div>
@@ -75,16 +98,6 @@ const Dashboard = () => {
                 <span className="hidden lg:inline">Déconnexion</span>
               </Button>
             </div>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
           </div>
 
           {/* Mobile Menu */}
@@ -204,7 +217,7 @@ const Dashboard = () => {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+                      className="flex-1 text-xs sm:text-sm h-8 sm:h-9 gradient-gold text-accent-foreground hover:opacity-90"
                       onClick={() => navigate(`/editor/${project.id}`)}
                     >
                       <Pencil className="h-3 w-3 mr-1" />
@@ -216,7 +229,7 @@ const Dashboard = () => {
                       className="h-8 sm:h-9 w-8 sm:w-9 p-0"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(project.id, project.name);
+                        openDeleteModal(project.id, project.name);
                       }}
                     >
                       <Trash2 className="h-3 w-3" />
@@ -241,7 +254,7 @@ const Dashboard = () => {
             </p>
             <Button
               className="gradient-gold text-accent-foreground hover:opacity-90 shadow-gold px-6 sm:px-8"
-              onClick={() => navigate("/editor")}
+              onClick={() => setIsNewProjectModalOpen(true)}
             >
               <Plus className="w-4 h-4 mr-2" />
               Créer un projet
@@ -254,6 +267,19 @@ const Dashboard = () => {
       <NewProjectModal
         isOpen={isNewProjectModalOpen}
         onClose={() => setIsNewProjectModalOpen(false)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={deleteModalState.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={handleDelete}
+        title="Supprimer le projet"
+        message={`Êtes-vous sûr de vouloir supprimer le projet "${deleteModalState.projectName}" ? Cette action est irréversible.`}
+        confirmText="Supprimer"
+        cancelText="Annuler"
+        variant="danger"
+        isLoading={deleteProject.isPending}
       />
     </div>
   );

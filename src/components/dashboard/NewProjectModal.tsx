@@ -21,12 +21,15 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 
   const [projectName, setProjectName] = useState("");
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [roomWidth, setRoomWidth] = useState<number>(4);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (file: File) => {
-    if (file && file.type.startsWith("image/")) {
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+
+    if (file && allowedTypes.includes(file.type)) {
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target?.result) {
@@ -34,6 +37,8 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
         }
       };
       reader.readAsDataURL(file);
+    } else if (file) {
+      toast.error("Format non supporté. Utilisez PNG ou JPEG.");
     }
   };
 
@@ -77,7 +82,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
       const projectData = {
         user_id: user.id,
         name: projectName.trim(),
-        room_data: { backgroundImage },
+        room_data: { backgroundImage, roomWidth },
         furniture_placements: [],
         room_image_url: backgroundImage,
       };
@@ -97,6 +102,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
   const handleClose = () => {
     setProjectName("");
     setBackgroundImage(null);
+    setRoomWidth(4);
     onClose();
   };
 
@@ -180,16 +186,35 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
                   <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1 hidden sm:block">
                     ou glissez-déposez votre image ici
                   </p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG ou JPEG uniquement</p>
                 </div>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg"
                   className="hidden"
                   onChange={handleInputChange}
                 />
               </div>
             )}
+          </div>
+
+          {/* Largeur de la pièce */}
+          <div className="space-y-2">
+            <Label htmlFor="roomWidth">Largeur de la pièce (mètres)</Label>
+            <p className="text-xs text-muted-foreground">
+              Estimez la largeur visible sur votre photo pour un dimensionnement réaliste des meubles.
+            </p>
+            <Input
+              id="roomWidth"
+              type="number"
+              min="1"
+              max="20"
+              step="0.5"
+              value={roomWidth}
+              onChange={(e) => setRoomWidth(parseFloat(e.target.value) || 4)}
+              placeholder="4"
+            />
           </div>
 
           {/* Boutons */}
@@ -198,7 +223,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
               Annuler
             </Button>
             <Button
-              className="flex-1 h-10 sm:h-11 text-sm"
+              className="flex-1 h-10 sm:h-11 text-sm gradient-gold text-accent-foreground hover:opacity-90"
               onClick={handleCreate}
               disabled={isCreating || !projectName.trim() || !backgroundImage}
             >

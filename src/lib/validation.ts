@@ -17,8 +17,25 @@ export const FurniturePlacementSchema = z.object({
   scale: z.number().positive().min(0.1).max(5),
 });
 
+// Accepte soit une URL valide, soit une data URL base64
+const ImageUrlSchema = z.string().refine(
+  (val) => {
+    if (!val) return true;
+    // Accepter les data URLs
+    if (val.startsWith('data:image/')) return true;
+    // Accepter les URLs HTTP/HTTPS
+    try {
+      const url = new URL(val);
+      return ['http:', 'https:'].includes(url.protocol);
+    } catch {
+      return false;
+    }
+  },
+  { message: "URL d'image invalide" }
+).nullable().optional();
+
 export const RoomDataSchema = z.object({
-  backgroundImage: z.string().url().nullable().optional(),
+  backgroundImage: ImageUrlSchema,
 }).nullable();
 
 export const ProjectCreateSchema = z.object({
@@ -26,7 +43,7 @@ export const ProjectCreateSchema = z.object({
   name: z.string().min(1).max(100).trim(),
   room_data: RoomDataSchema,
   furniture_placements: z.array(FurniturePlacementSchema).nullable(),
-  room_image_url: z.string().url().nullable().optional(),
+  room_image_url: ImageUrlSchema,
 });
 
 export const ProjectUpdateSchema = ProjectCreateSchema.partial().omit({ user_id: true });

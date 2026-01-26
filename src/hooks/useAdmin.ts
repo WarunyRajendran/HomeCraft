@@ -1,38 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
-interface AdminProfile {
-  is_admin: boolean;
-}
+// Note: La colonne is_admin n'existe pas encore dans la table profiles.
+// Pour l'instant, on utilise une liste d'emails admin en dur.
+// TODO: Ajouter la colonne is_admin à la table profiles quand nécessaire.
+
+const ADMIN_EMAILS = ['admin@homecraft.com', 'waruny@hotmail.fr'];
 
 export const useAdmin = () => {
   const { user, loading: authLoading } = useAuth();
 
-  const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ['admin-profile', user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('user_id', user.id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching admin status:', error);
-        return null;
-      }
-
-      return data as AdminProfile;
-    },
-    enabled: !!user?.id,
-  });
+  // Simple check based on email for now
+  const isAdmin = user?.email ? ADMIN_EMAILS.includes(user.email) : false;
 
   return {
     user,
-    isAdmin: profile?.is_admin ?? false,
-    isLoading: authLoading || profileLoading,
+    isAdmin,
+    isLoading: authLoading,
   };
 };

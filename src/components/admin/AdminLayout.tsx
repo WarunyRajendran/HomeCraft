@@ -135,7 +135,7 @@ export const AdminLayout = () => {
 
       {/* Mobile Sidebar Drawer */}
       <aside
-        className={`md:hidden fixed top-[57px] sm:top-[65px] left-0 z-40 h-[calc(100vh-57px)] sm:h-[calc(100vh-65px)] w-56 sm:w-64 bg-background border-r border-border flex flex-col transform transition-transform duration-300 ease-in-out ${
+        className={`md:hidden fixed top-[57px] sm:top-[65px] left-0 z-40 h-[calc(100dvh-57px)] sm:h-[calc(100dvh-65px)] w-56 sm:w-64 bg-background border-r border-border flex flex-col transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
