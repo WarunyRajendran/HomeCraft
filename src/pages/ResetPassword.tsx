@@ -35,7 +35,7 @@ const ResetPassword = () => {
       if (session?.user) {
         setIsValidSession(true);
       } else {
-        toast.error("Lien de réinitialisation invalide ou expiré");
+        toast.error("Invalid or expired reset link");
         navigate("/auth");
       }
       setIsLoading(false);
@@ -49,13 +49,13 @@ const ResetPassword = () => {
 
     // Verify email matches the session user
     if (user && email.toLowerCase() !== user.email?.toLowerCase()) {
-      toast.error("L'email ne correspond pas au compte");
+      toast.error("Email does not match the account");
       return;
     }
 
     // Validate passwords match
     if (newPassword !== confirmPassword) {
-      toast.error("Les mots de passe ne correspondent pas");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -68,13 +68,13 @@ const ResetPassword = () => {
 
     try {
       await updatePasswordMutation.mutateAsync(newPassword);
-      toast.success("Mot de passe modifié avec succès !");
+      toast.success("Password changed successfully!");
 
       // Sign out and redirect to login
       await supabase.auth.signOut();
       navigate("/auth");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      const message = error instanceof Error ? error.message : "An error occurred";
       toast.error(message);
     }
   };
@@ -84,7 +84,7 @@ const ResetPassword = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto text-foreground" />
-          <p className="mt-4 text-muted-foreground">Vérification du lien...</p>
+          <p className="mt-4 text-muted-foreground">Verifying link...</p>
         </div>
       </div>
     );
@@ -103,7 +103,7 @@ const ResetPassword = () => {
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour à la connexion
+          Back to login
         </Link>
 
         <Card className="shadow-elegant border-border/50">
@@ -111,19 +111,19 @@ const ResetPassword = () => {
             <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl gradient-gold flex items-center justify-center mb-3 sm:mb-4">
               <Box className="w-6 h-6 sm:w-8 sm:h-8 text-accent-foreground" />
             </div>
-            <CardTitle className="font-display text-xl sm:text-2xl">Nouveau mot de passe</CardTitle>
+            <CardTitle className="font-display text-xl sm:text-2xl">New password</CardTitle>
           </CardHeader>
 
           <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="reset-email">Confirmez votre email</Label>
+                <Label htmlFor="reset-email">Confirm your email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="reset-email"
                     type="email"
-                    placeholder="vous@exemple.com"
+                    placeholder="you@example.com"
                     className="pl-10"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -133,7 +133,7 @@ const ResetPassword = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="new-password">Nouveau mot de passe</Label>
+                <Label htmlFor="new-password">New password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -159,12 +159,12 @@ const ResetPassword = () => {
                   </button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Minimum 12 caractères avec majuscule, minuscule, chiffre et caractère spécial
+                  Minimum 12 characters with uppercase, lowercase, number and special character
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirmer le mot de passe</Label>
+                <Label htmlFor="confirm-password">Confirm password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -199,10 +199,10 @@ const ResetPassword = () => {
                 {updatePasswordMutation.isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Modification...
+                    Updating...
                   </>
                 ) : (
-                  "Modifier le mot de passe"
+                  "Change password"
                 )}
               </Button>
             </form>

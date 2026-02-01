@@ -25,17 +25,17 @@ const AdminDashboard = () => {
   });
 
   const statCards = [
-    { label: 'Meubles', value: stats?.furniture ?? 0, icon: Sofa, color: 'text-blue-500' },
-    { label: 'Partenaires', value: stats?.partners ?? 0, icon: Building2, color: 'text-green-500' },
-    { label: 'Catégories', value: stats?.categories ?? 0, icon: FolderTree, color: 'text-purple-500' },
-    { label: 'Projets utilisateurs', value: stats?.projects ?? 0, icon: Users, color: 'text-orange-500' },
+    { label: 'Furniture', value: stats?.furniture ?? 0, icon: Sofa, color: 'text-blue-500' },
+    { label: 'Partners', value: stats?.partners ?? 0, icon: Building2, color: 'text-green-500' },
+    { label: 'Categories', value: stats?.categories ?? 0, icon: FolderTree, color: 'text-purple-500' },
+    { label: 'User projects', value: stats?.projects ?? 0, icon: Users, color: 'text-orange-500' },
   ];
 
   return (
     <div className="p-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground">Vue d'ensemble de l'application</p>
+        <p className="text-muted-foreground">Application overview</p>
       </div>
 
       {isLoading ? (

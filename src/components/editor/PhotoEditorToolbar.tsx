@@ -123,7 +123,7 @@ export const PhotoEditorToolbar = ({
             >
               <ImagePlus className="h-4 w-4" />
               <div>
-                <span className="text-xs sm:text-sm">{backgroundImage ? "Changer la photo" : "Importer une photo"}</span>
+                <span className="text-xs sm:text-sm">{backgroundImage ? "Change photo" : "Import photo"}</span>
                 <p className="text-xs text-muted-foreground">PNG ou JPEG</p>
               </div>
             </button>
@@ -136,7 +136,7 @@ export const PhotoEditorToolbar = ({
                 }}
               >
                 <ImageOff className="h-4 w-4" />
-                Supprimer la photo
+                Remove photo
               </button>
             )}
             <div className="h-px bg-border my-1" />
@@ -148,7 +148,7 @@ export const PhotoEditorToolbar = ({
               }}
             >
               <Trash2 className="h-4 w-4" />
-              Tout effacer
+              Clear all
             </button>
           </div>
         )}
@@ -169,11 +169,11 @@ export const PhotoEditorToolbar = ({
           size="sm"
           onClick={() => onSetViewMode ? onSetViewMode('hybrid') : onToggleViewMode()}
           className="h-7 sm:h-9 px-1.5 sm:px-3 rounded-none border-0"
-          title="Mode Hybride (meubles 3D sur photo)"
+          title="Hybrid mode (3D furniture on photo)"
           disabled={!backgroundImage}
         >
           <Layers className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
-          <span className="hidden md:inline text-xs">Hybride</span>
+          <span className="hidden md:inline text-xs">Hybrid</span>
         </Button>
         <div className="w-px h-5 sm:h-6 bg-border" />
         <Button
@@ -181,7 +181,7 @@ export const PhotoEditorToolbar = ({
           size="sm"
           onClick={() => onSetViewMode ? onSetViewMode('3d') : onToggleViewMode()}
           className="h-7 sm:h-9 px-1.5 sm:px-3 rounded-none border-0"
-          title="Mode 3D (pièce virtuelle)"
+          title="3D mode (virtual room)"
         >
           <Box className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
           <span className="hidden md:inline text-xs">3D</span>
@@ -196,17 +196,17 @@ export const PhotoEditorToolbar = ({
             size="sm"
             onClick={onCalibrate}
             className="h-7 sm:h-9 px-1.5 sm:px-3 shrink-0"
-            title="Calibrer la perspective"
+            title="Calibrate perspective"
           >
             <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
-            <span className="hidden md:inline text-xs">Calibrer</span>
+            <span className="hidden md:inline text-xs">Calibrate</span>
           </Button>
           <Button
             variant={isPerspectiveOpen ? 'default' : 'outline'}
             size="sm"
             onClick={onTogglePerspective}
             className="h-7 sm:h-9 px-1.5 sm:px-3 shrink-0 md:hidden"
-            title="Paramètres de perspective"
+            title="Perspective settings"
           >
             <Focus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </Button>
@@ -218,7 +218,7 @@ export const PhotoEditorToolbar = ({
       {/* Selection controls */}
       <div className="hidden md:flex items-center gap-2 shrink-0">
         <span className={`text-xs font-medium truncate max-w-[100px] ${selectedItem ? 'text-foreground' : 'text-muted-foreground'}`}>
-          {selectedItem ? selectedItem.name : 'Aucun meuble'}
+          {selectedItem ? selectedItem.name : 'No furniture'}
         </span>
       </div>
 
@@ -227,7 +227,7 @@ export const PhotoEditorToolbar = ({
           variant="outline"
           size="icon"
           onClick={() => onRotate("left")}
-          title="Pivoter à gauche"
+          title="Rotate left"
           disabled={!selectedItem}
           className="h-7 w-7 sm:h-9 sm:w-9"
         >
@@ -237,7 +237,7 @@ export const PhotoEditorToolbar = ({
           variant="outline"
           size="icon"
           onClick={() => onRotate("right")}
-          title="Pivoter à droite"
+          title="Rotate right"
           disabled={!selectedItem}
           className="h-7 w-7 sm:h-9 sm:w-9"
         >
@@ -285,7 +285,7 @@ export const PhotoEditorToolbar = ({
         ) : (
           <>
             <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
-            <span className="hidden sm:inline text-xs sm:text-sm">Sauvegarder</span>
+            <span className="hidden sm:inline text-xs sm:text-sm">Save</span>
           </>
         )}
       </Button>

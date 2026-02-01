@@ -49,7 +49,7 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
   if (error) {
     return (
       <div className="flex flex-col h-full items-center justify-center p-4">
-        <p className="text-destructive">Erreur de chargement</p>
+        <p className="text-destructive">Loading error</p>
         <p className="text-sm text-muted-foreground">{(error as Error).message}</p>
       </div>
     );
@@ -58,13 +58,13 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
   return (
     <div className="flex flex-col h-full bg-background md:border-l border-border overflow-hidden">
       <div className="p-2 md:p-4 border-b border-border shrink-0">
-        <h2 className="text-base md:text-lg font-semibold text-foreground mb-2 md:mb-3">Catalogue</h2>
+        <h2 className="text-base md:text-lg font-semibold text-foreground mb-2 md:mb-3">Catalog</h2>
 
         {/* Search */}
         <div className="relative mb-2 md:mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Rechercher..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 h-9 text-sm"
@@ -78,10 +78,10 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
             className="cursor-pointer text-xs py-0.5 px-2"
             onClick={() => setSelectedCategoryId(null)}
           >
-            Tous
+            All
           </Badge>
           {categoriesLoading ? (
-            <Badge variant="outline" className="text-xs py-0.5 px-2">Chargement...</Badge>
+            <Badge variant="outline" className="text-xs py-0.5 px-2">Loading...</Badge>
           ) : (
             categories?.map(category => (
               <Badge
@@ -196,7 +196,7 @@ export const FurnitureCatalog = ({ onAddFurniture }: FurnitureCatalogProps) => {
           </div>
         ) : (
           <div className="flex items-center justify-center h-32">
-            <p className="text-muted-foreground text-sm">Aucun meuble trouvé</p>
+            <p className="text-muted-foreground text-sm">No furniture found</p>
           </div>
         )}
       </div>

@@ -51,7 +51,7 @@ export const ImageUploader = ({ onImageUpload, currentImage, onRemoveImage }: Im
     return (
       <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-lg">
         <Image className="h-4 w-4 text-primary" />
-        <span className="text-sm text-foreground">Photo importée</span>
+        <span className="text-sm text-foreground">Photo imported</span>
         <Button
           variant="ghost"
           size="icon"
@@ -81,9 +81,9 @@ export const ImageUploader = ({ onImageUpload, currentImage, onRemoveImage }: Im
     >
       <Upload className="h-5 w-5 text-muted-foreground" />
       <div className="text-sm">
-        <span className="text-foreground font-medium">Importer une photo</span>
-        <span className="text-muted-foreground"> ou glisser-déposer</span>
-        <p className="text-xs text-muted-foreground mt-1">PNG ou JPEG uniquement</p>
+        <span className="text-foreground font-medium">Import a photo</span>
+        <span className="text-muted-foreground"> or drag and drop</span>
+        <p className="text-xs text-muted-foreground mt-1">PNG or JPEG only</p>
       </div>
       <input
         ref={fileInputRef}

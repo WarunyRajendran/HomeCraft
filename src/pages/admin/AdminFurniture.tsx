@@ -93,12 +93,12 @@ const AdminFurniture = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-furniture'] });
-      toast.success('Modèle 3D mis à jour');
+      toast.success('3D model updated');
       setUploadingModelId(null);
     },
     onError: (error) => {
       console.error('Upload model error:', error);
-      toast.error('Erreur lors de l\'upload du modèle 3D');
+      toast.error('Error uploading 3D model');
       setUploadingModelId(null);
     },
   });
@@ -115,10 +115,10 @@ const AdminFurniture = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-furniture'] });
-      toast.success('Modèle 3D supprimé');
+      toast.success('3D model removed');
     },
     onError: () => {
-      toast.error('Erreur lors de la suppression');
+      toast.error('Error deleting');
     },
   });
 
@@ -136,7 +136,7 @@ const AdminFurniture = () => {
     const fileExt = file?.name.toLowerCase().slice(file.name.lastIndexOf('.'));
 
     if (file && !allowedExtensions.includes(fileExt || '')) {
-      toast.error('Format non supporté. Utilisez GLB ou GLTF.');
+      toast.error('Unsupported format. Use GLB or GLTF.');
       setUploadingModelId(null);
       return;
     }
@@ -164,15 +164,15 @@ const AdminFurniture = () => {
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Gestion des Meubles</h1>
-        <p className="text-muted-foreground">Ajoutez des modèles 3D aux meubles du catalogue</p>
+        <h1 className="text-2xl font-bold text-foreground">Furniture Management</h1>
+        <p className="text-muted-foreground">Add 3D models to catalog furniture</p>
       </div>
 
       {/* Search */}
       <div className="relative mb-6 max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Rechercher un meuble..."
+          placeholder="Search furniture..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -182,15 +182,15 @@ const AdminFurniture = () => {
       {/* Stats */}
       <div className="flex flex-wrap gap-4 mb-6">
         <Badge variant="outline" className="text-sm">
-          {furniture?.length ?? 0} meubles au total
+          {furniture?.length ?? 0} total furniture
         </Badge>
         <Badge variant="default" className="text-sm bg-purple-600">
           <Check className="h-3 w-3 mr-1" />
-          {furniture?.filter(f => f.model_url).length ?? 0} avec modèle 3D
+          {furniture?.filter(f => f.model_url).length ?? 0} with 3D model
         </Badge>
         <Badge variant="secondary" className="text-sm">
           <Box className="h-3 w-3 mr-1" />
-          {furniture?.filter(f => !f.model_url).length ?? 0} sans modèle 3D
+          {furniture?.filter(f => !f.model_url).length ?? 0} without 3D model
         </Badge>
       </div>
 
@@ -278,7 +278,7 @@ const AdminFurniture = () => {
                     ) : (
                       <>
                         <Upload className="h-4 w-4 mr-2" />
-                        {item.model_url ? 'Changer le modèle 3D' : 'Ajouter modèle 3D'}
+                        {item.model_url ? 'Change 3D model' : 'Add 3D model'}
                       </>
                     )}
                   </Button>
@@ -302,7 +302,7 @@ const AdminFurniture = () => {
       {filteredFurniture?.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <Box className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Aucun meuble trouvé</p>
+          <p className="text-muted-foreground">No furniture found</p>
         </div>
       )}
     </div>

@@ -3,9 +3,9 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const benefits = [
-  "Gratuit pour commencer",
-  "Pas de carte bancaire requise",
-  "Accès à tous les catalogues",
+  "Free to get started",
+  "No credit card required",
+  "Access to all catalogs",
 ];
 
 const CTA = () => {
@@ -20,11 +20,11 @@ const CTA = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display text-3xl md:text-5xl font-bold text-primary-foreground mb-6">
-            Prêt à transformer
-            <span className="block text-gradient-gold">votre intérieur ?</span>
+            Ready to transform
+            <span className="block text-gradient-gold">your interior?</span>
           </h2>
           <p className="text-lg text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Rejoignez des milliers d'utilisateurs qui visualisent leur futur intérieur avant d'acheter.
+            Join thousands of users who visualize their future interior before buying.
           </p>
 
           {/* Benefits */}
@@ -40,7 +40,7 @@ const CTA = () => {
           {/* CTA Button */}
           <Button asChild size="lg" className="gradient-gold text-accent-foreground hover:opacity-90 shadow-gold px-10 py-7 text-lg font-semibold group">
             <Link to="/auth">
-              Créer un compte gratuit
+              Create a free account
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>

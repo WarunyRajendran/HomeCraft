@@ -52,7 +52,7 @@ export const PerspectiveControls = ({
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-sm flex items-center gap-2">
           <Camera className="h-4 w-4" />
-          Paramètres de perspective
+          Perspective settings
         </h3>
         <Button
           variant="ghost"
@@ -60,7 +60,7 @@ export const PerspectiveControls = ({
           onClick={handleReset}
           className="h-7 text-xs"
         >
-          Réinitialiser
+          Reset
         </Button>
       </div>
 
@@ -71,7 +71,7 @@ export const PerspectiveControls = ({
           <div className="flex items-center justify-between">
             <Label className="text-xs flex items-center gap-1.5">
               <Camera className="h-3.5 w-3.5" />
-              Champ de vision
+              Field of view
             </Label>
             <span className="text-xs text-muted-foreground">{settings.fov}°</span>
           </div>
@@ -90,7 +90,7 @@ export const PerspectiveControls = ({
           <div className="flex items-center justify-between">
             <Label className="text-xs flex items-center gap-1.5">
               <Move className="h-3.5 w-3.5" />
-              Hauteur de vue
+              Camera height
             </Label>
             <span className="text-xs text-muted-foreground">
               {settings.cameraHeight.toFixed(1)}m
@@ -106,12 +106,12 @@ export const PerspectiveControls = ({
           />
         </div>
 
-        {/* Inclinaison */}
+        {/* Tilt */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-xs flex items-center gap-1.5">
               <RotateCw className="h-3.5 w-3.5" />
-              Inclinaison
+              Tilt
             </Label>
             <span className="text-xs text-muted-foreground">
               {settings.cameraTilt}°
@@ -133,13 +133,13 @@ export const PerspectiveControls = ({
         <div className="space-y-3">
           <Label className="text-xs flex items-center gap-1.5">
             <Ruler className="h-3.5 w-3.5" />
-            Dimensions de la pièce
+            Room dimensions
           </Label>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <Label className="text-xs text-muted-foreground">
-                Largeur (m)
+                Width (m)
               </Label>
               <Input
                 type="number"
@@ -156,7 +156,7 @@ export const PerspectiveControls = ({
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-muted-foreground">
-                Profondeur (m)
+                Depth (m)
               </Label>
               <Input
                 type="number"
@@ -177,12 +177,12 @@ export const PerspectiveControls = ({
         {/* Point de fuite (avancé) */}
         <details className="group">
           <summary className="text-xs text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
-            Options avancées
+            Advanced options
           </summary>
           <div className="mt-3 space-y-3 pl-2 border-l-2 border-border">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs">Ligne d'horizon</Label>
+                <Label className="text-xs">Horizon line</Label>
                 <span className="text-xs text-muted-foreground">
                   {Math.round(settings.horizonY * 100)}%
                 </span>
@@ -200,7 +200,7 @@ export const PerspectiveControls = ({
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">
-                  Point de fuite X
+                  Vanishing point X
                 </Label>
                 <Input
                   type="number"
@@ -220,7 +220,7 @@ export const PerspectiveControls = ({
               </div>
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">
-                  Point de fuite Y
+                  Vanishing point Y
                 </Label>
                 <Input
                   type="number"
@@ -255,7 +255,7 @@ export const PerspectiveControls = ({
               className="flex-1"
             >
               <X className="h-4 w-4 mr-1" />
-              Annuler
+              Cancel
             </Button>
             <Button
               size="sm"
@@ -263,7 +263,7 @@ export const PerspectiveControls = ({
               className="flex-1 gradient-gold text-accent-foreground"
             >
               <Check className="h-4 w-4 mr-1" />
-              Appliquer
+              Apply
             </Button>
           </div>
         </>

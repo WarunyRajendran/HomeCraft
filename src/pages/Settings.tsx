@@ -34,7 +34,7 @@ const Settings = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      toast.error("Les mots de passe ne correspondent pas");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -47,11 +47,11 @@ const Settings = () => {
     setIsUpdatingPassword(true);
     try {
       await authService.updatePassword(newPassword);
-      toast.success("Mot de passe mis à jour avec succès");
+      toast.success("Password updated successfully");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erreur lors de la mise à jour";
+      const message = error instanceof Error ? error.message : "Error updating";
       toast.error(message);
     } finally {
       setIsUpdatingPassword(false);
@@ -66,9 +66,9 @@ const Settings = () => {
     setIsUpdatingProfile(true);
     try {
       await authService.updateProfile(user.id, { full_name: fullName });
-      toast.success("Profil mis à jour avec succès");
+      toast.success("Profile updated successfully");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erreur lors de la mise à jour";
+      const message = error instanceof Error ? error.message : "Error updating";
       toast.error(message);
     } finally {
       setIsUpdatingProfile(false);
@@ -76,8 +76,8 @@ const Settings = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (deleteConfirmation !== "SUPPRIMER") {
-      toast.error("Veuillez taper SUPPRIMER pour confirmer");
+    if (deleteConfirmation !== "DELETE") {
+      toast.error("Please type DELETE to confirm");
       return;
     }
 
@@ -86,10 +86,10 @@ const Settings = () => {
     setIsDeleting(true);
     try {
       await authService.deleteAccount(user.id);
-      toast.success("Compte supprimé avec succès");
+      toast.success("Account deleted successfully");
       navigate("/auth");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erreur lors de la suppression";
+      const message = error instanceof Error ? error.message : "Error deleting account";
       toast.error(message);
     } finally {
       setIsDeleting(false);
@@ -119,7 +119,7 @@ const Settings = () => {
 
       {/* Main content */}
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-10 pb-safe max-w-2xl">
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">Paramètres</h1>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">Settings</h1>
 
         <div className="space-y-4 sm:space-y-6">
           {/* Profil */}
@@ -127,22 +127,22 @@ const Settings = () => {
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
                 <User className="h-4 w-4 sm:h-5 sm:w-5" />
-                Profil
+                Profile
               </CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Modifiez vos informations personnelles
+                Edit your personal information
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Nom complet</Label>
+                  <Label htmlFor="fullName">Full name</Label>
                   <Input
                     id="fullName"
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Votre nom complet"
+                    placeholder="Your full name"
                   />
                 </div>
 
@@ -155,7 +155,7 @@ const Settings = () => {
                     className="bg-muted"
                   />
                   <p className="text-xs text-muted-foreground">
-                    L'email ne peut pas être modifié
+                    Email cannot be changed
                   </p>
                 </div>
 
@@ -163,10 +163,10 @@ const Settings = () => {
                   {isUpdatingProfile ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Mise à jour...
+                      Updating...
                     </>
                   ) : (
-                    "Mettre à jour le profil"
+                    "Update profile"
                   )}
                 </Button>
               </form>
@@ -178,16 +178,16 @@ const Settings = () => {
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
                 <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
-                Changer le mot de passe
+                Change password
               </CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Mettez à jour votre mot de passe pour sécuriser votre compte
+                Update your password to secure your account
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <form onSubmit={handleUpdatePassword} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">Nouveau mot de passe</Label>
+                  <Label htmlFor="newPassword">New password</Label>
                   <div className="relative">
                     <Input
                       id="newPassword"
@@ -212,7 +212,7 @@ const Settings = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
@@ -235,7 +235,7 @@ const Settings = () => {
                     </button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Minimum 12 caractères avec majuscule, minuscule, chiffre et caractère spécial
+                    Minimum 12 characters with uppercase, lowercase, number and special character
                   </p>
                 </div>
 
@@ -243,10 +243,10 @@ const Settings = () => {
                   {isUpdatingPassword ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Mise à jour...
+                      Updating...
                     </>
                   ) : (
-                    "Changer le mot de passe"
+                    "Change password"
                   )}
                 </Button>
               </form>
@@ -258,50 +258,50 @@ const Settings = () => {
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="flex items-center gap-2 text-destructive text-base sm:text-lg">
                 <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
-                Supprimer le compte
+                Delete account
               </CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Cette action est irréversible. Toutes vos données seront supprimées.
+                This action is irreversible. All your data will be deleted.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <div className="space-y-4">
                 <div className="p-3 sm:p-4 bg-destructive/10 rounded-lg text-xs sm:text-sm text-destructive">
-                  <p className="font-medium mb-2">Attention :</p>
+                  <p className="font-medium mb-2">Warning:</p>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Tous vos projets seront supprimés</li>
-                    <li>Votre profil sera effacé</li>
-                    <li>Cette action ne peut pas être annulée</li>
+                    <li>All your projects will be deleted</li>
+                    <li>Your profile will be erased</li>
+                    <li>This action cannot be undone</li>
                   </ul>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="deleteConfirmation">
-                    Tapez <span className="font-bold">SUPPRIMER</span> pour confirmer
+                    Type <span className="font-bold">DELETE</span> to confirm
                   </Label>
                   <Input
                     id="deleteConfirmation"
                     type="text"
                     value={deleteConfirmation}
                     onChange={(e) => setDeleteConfirmation(e.target.value)}
-                    placeholder="SUPPRIMER"
+                    placeholder="DELETE"
                   />
                 </div>
 
                 <Button
                   variant="destructive"
                   onClick={handleDeleteAccount}
-                  disabled={isDeleting || deleteConfirmation !== "SUPPRIMER"}
+                  disabled={isDeleting || deleteConfirmation !== "DELETE"}
                 >
                   {isDeleting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Suppression...
+                      Deleting...
                     </>
                   ) : (
                     <>
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Supprimer mon compte
+                      Delete my account
                     </>
                   )}
                 </Button>

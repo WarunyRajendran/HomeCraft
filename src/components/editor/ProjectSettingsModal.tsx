@@ -56,7 +56,7 @@ export const ProjectSettingsModal = ({
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Settings className="h-5 w-5 text-primary" />
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold">Paramètres du projet</h2>
+            <h2 className="text-lg sm:text-xl font-semibold">Project settings</h2>
           </div>
           <Button
             variant="ghost"
@@ -72,13 +72,13 @@ export const ProjectSettingsModal = ({
         <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="projectName">Nom du projet</Label>
+              <Label htmlFor="projectName">Project name</Label>
               <Input
                 id="projectName"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Mon projet"
+                placeholder="My project"
                 autoFocus
               />
             </div>
@@ -91,14 +91,14 @@ export const ProjectSettingsModal = ({
                 onClick={onClose}
                 disabled={isLoading}
               >
-                Annuler
+                Cancel
               </Button>
               <Button
                 type="submit"
                 className="flex-1 h-10 sm:h-11 text-sm gradient-gold text-accent-foreground hover:opacity-90"
                 disabled={isLoading || !name.trim()}
               >
-                {isLoading ? "Enregistrement..." : "Enregistrer"}
+                {isLoading ? "Saving..." : "Save"}
               </Button>
             </div>
           </form>

@@ -20,8 +20,8 @@ export const ConfirmModal = ({
   onConfirm,
   title,
   message,
-  confirmText = "Confirmer",
-  cancelText = "Annuler",
+  confirmText = "Confirm",
+  cancelText = "Cancel",
   variant = "default",
   isLoading = false,
 }: ConfirmModalProps) => {
@@ -93,7 +93,7 @@ export const ConfirmModal = ({
               onClick={handleConfirm}
               disabled={isLoading}
             >
-              {isLoading ? "Chargement..." : confirmText}
+              {isLoading ? "Loading..." : confirmText}
             </Button>
           </div>
         </CardContent>

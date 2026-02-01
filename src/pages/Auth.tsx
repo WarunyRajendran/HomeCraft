@@ -71,12 +71,12 @@ const Auth = () => {
         password: loginPassword,
       });
 
-      toast.success("Connexion réussie !");
+      toast.success("Login successful!");
       navigate("/dashboard");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      const message = error instanceof Error ? error.message : "An error occurred";
       if (message.includes("Invalid login credentials")) {
-        toast.error("Email ou mot de passe incorrect");
+        toast.error("Invalid email or password");
       } else {
         toast.error(message);
       }
@@ -88,14 +88,14 @@ const Auth = () => {
 
     try {
       await resetPasswordMutation.mutateAsync(forgotPasswordEmail);
-      toast.success("Un email de réinitialisation a été envoyé. Vérifiez votre boîte de réception.");
+      toast.success("A reset email has been sent. Check your inbox.");
       setShowForgotPassword(false);
       setForgotPasswordEmail("");
       // Clear login fields to avoid confusion
       setLoginEmail("");
       setLoginPassword("");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      const message = error instanceof Error ? error.message : "An error occurred";
       toast.error(message);
     }
   };
@@ -117,12 +117,12 @@ const Auth = () => {
         fullName: signupName,
       });
 
-      toast.success("Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.");
+      toast.success("Account created successfully! Check your email to confirm your account.");
       setActiveTab("login");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Une erreur s'est produite";
+      const message = error instanceof Error ? error.message : "An error occurred";
       if (message.includes("already registered")) {
-        toast.error("Cet email est déjà utilisé");
+        toast.error("This email is already in use");
       } else {
         toast.error(message);
       }
@@ -149,24 +149,24 @@ const Auth = () => {
             </div>
             <CardTitle className="font-display text-xl sm:text-2xl">HomeCraft</CardTitle>
             <CardDescription className="text-xs sm:text-sm">
-              Connectez-vous pour accéder à vos projets
+              Sign in to access your projects
             </CardDescription>
           </CardHeader>
 
           <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6">
-                <TabsTrigger value="login" className="text-xs sm:text-sm">Connexion</TabsTrigger>
-                <TabsTrigger value="signup" className="text-xs sm:text-sm">Inscription</TabsTrigger>
+                <TabsTrigger value="login" className="text-xs sm:text-sm">Login</TabsTrigger>
+                <TabsTrigger value="signup" className="text-xs sm:text-sm">Sign Up</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
                 {showForgotPassword ? (
                   <form onSubmit={handleForgotPassword} className="space-y-4">
                     <div className="text-center mb-4">
-                      <h3 className="font-semibold text-base sm:text-lg">Mot de passe oublié ?</h3>
+                      <h3 className="font-semibold text-base sm:text-lg">Forgot password?</h3>
                       <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                        Entrez votre email pour recevoir un lien de réinitialisation
+                        Enter your email to receive a reset link
                       </p>
                     </div>
 
@@ -177,7 +177,7 @@ const Auth = () => {
                         <Input
                           id="forgot-email"
                           type="email"
-                          placeholder="vous@exemple.com"
+                          placeholder="you@example.com"
                           className="pl-10"
                           value={forgotPasswordEmail}
                           onChange={(e) => setForgotPasswordEmail(e.target.value)}
@@ -194,10 +194,10 @@ const Auth = () => {
                       {resetPasswordMutation.isPending ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Envoi...
+                          Sending...
                         </>
                       ) : (
-                        "Envoyer le lien"
+                        "Send reset link"
                       )}
                     </Button>
 
@@ -206,7 +206,7 @@ const Auth = () => {
                       onClick={() => setShowForgotPassword(false)}
                       className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Retour à la connexion
+                      Back to login
                     </button>
                   </form>
                 ) : (
@@ -218,7 +218,7 @@ const Auth = () => {
                         <Input
                           id="login-email"
                           type="email"
-                          placeholder="vous@exemple.com"
+                          placeholder="you@example.com"
                           className="pl-10"
                           value={loginEmail}
                           onChange={(e) => setLoginEmail(e.target.value)}
@@ -229,13 +229,13 @@ const Auth = () => {
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Label htmlFor="login-password">Mot de passe</Label>
+                        <Label htmlFor="login-password">Password</Label>
                         <button
                           type="button"
                           onClick={() => setShowForgotPassword(true)}
                           className="text-xs text-muted-foreground hover:text-accent transition-colors"
                         >
-                          Mot de passe oublié ?
+                          Forgot password?
                         </button>
                       </div>
                       <div className="relative">
@@ -271,10 +271,10 @@ const Auth = () => {
                       {signInMutation.isPending ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Connexion...
+                          Logging in...
                         </>
                       ) : (
-                        "Se connecter"
+                        "Log in"
                       )}
                     </Button>
                   </form>
@@ -284,13 +284,13 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name">Nom complet</Label>
+                    <Label htmlFor="signup-name">Full name</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="signup-name"
                         type="text"
-                        placeholder="Jean Dupont"
+                        placeholder="John Doe"
                         className="pl-10"
                         value={signupName}
                         onChange={(e) => setSignupName(e.target.value)}
@@ -306,7 +306,7 @@ const Auth = () => {
                       <Input
                         id="signup-email"
                         type="email"
-                        placeholder="vous@exemple.com"
+                        placeholder="you@example.com"
                         className="pl-10"
                         value={signupEmail}
                         onChange={(e) => setSignupEmail(e.target.value)}
@@ -316,7 +316,7 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Mot de passe</Label>
+                    <Label htmlFor="signup-password">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
@@ -342,7 +342,7 @@ const Auth = () => {
                       </button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Minimum 12 caractères avec majuscule, minuscule, chiffre et caractère spécial
+                      Minimum 12 characters with uppercase, lowercase, number and special character
                     </p>
                   </div>
 
@@ -354,10 +354,10 @@ const Auth = () => {
                     {signUpMutation.isPending ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Création...
+                        Creating...
                       </>
                     ) : (
-                      "Créer un compte"
+                      "Create account"
                     )}
                   </Button>
                 </form>

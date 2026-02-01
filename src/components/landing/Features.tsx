@@ -4,43 +4,43 @@ import { Card, CardContent } from "../ui/card";
 const features = [
   {
     icon: Camera,
-    title: "Capturez votre espace",
-    description: "Prenez simplement une photo de votre pièce avec votre smartphone pour commencer.",
+    title: "Capture your space",
+    description: "Simply take a photo of your room with your smartphone to get started.",
     color: "text-accent",
     bgColor: "bg-accent/10",
   },
   {
     icon: Box,
-    title: "Vue 3D immersive",
-    description: "Visualisez vos meubles dans une vue 3D réaliste avec rotation complète.",
+    title: "Immersive 3D view",
+    description: "Visualize your furniture in a realistic 3D view with full rotation.",
     color: "text-primary",
     bgColor: "bg-primary/10",
   },
   {
     icon: Store,
-    title: "Grandes enseignes",
-    description: "Accédez au catalogue de partenaires comme IKEA, Conforama, But et plus encore.",
+    title: "Top brands",
+    description: "Access catalogs from partners like IKEA, Conforama, But and more.",
     color: "text-sage",
     bgColor: "bg-sage/10",
   },
   {
     icon: Palette,
-    title: "Personnalisez",
-    description: "Changez les couleurs, redimensionnez et positionnez chaque meuble librement.",
+    title: "Customize",
+    description: "Change colors, resize and position each piece of furniture freely.",
     color: "text-accent",
     bgColor: "bg-accent/10",
   },
   {
     icon: Save,
-    title: "Sauvegardez vos projets",
-    description: "Créez un compte pour sauvegarder tous vos projets et y accéder partout.",
+    title: "Save your projects",
+    description: "Create an account to save all your projects and access them anywhere.",
     color: "text-primary",
     bgColor: "bg-primary/10",
   },
   {
     icon: Share2,
-    title: "Partagez",
-    description: "Exportez et partagez vos créations avec vos proches ou professionnels.",
+    title: "Share",
+    description: "Export and share your designs with friends, family or professionals.",
     color: "text-sage",
     bgColor: "bg-sage/10",
   },
@@ -53,14 +53,14 @@ const Features = () => {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
           <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-3 sm:mb-4">
-            Fonctionnalités
+            Features
           </span>
           <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
-            Tout pour imaginer votre
-            <span className="text-gradient-gold"> intérieur parfait</span>
+            Everything to imagine your
+            <span className="text-gradient-gold"> perfect interior</span>
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base md:text-lg px-2">
-            Des outils puissants et intuitifs pour transformer votre vision en réalité.
+            Powerful and intuitive tools to turn your vision into reality.
           </p>
         </div>
 

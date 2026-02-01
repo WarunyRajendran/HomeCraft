@@ -33,7 +33,7 @@ const ImageUrlSchema = z.string().refine(
       return false;
     }
   },
-  { message: "URL d'image invalide" }
+  { message: "Invalid image URL" }
 ).nullable().optional();
 
 export const RoomDataSchema = z.object({
@@ -52,24 +52,24 @@ export const ProjectUpdateSchema = ProjectCreateSchema.partial().omit({ user_id:
 
 // Validation de la recherche de meubles
 export const SearchQuerySchema = z.string()
-  .min(1, 'La recherche ne peut pas être vide')
-  .max(100, 'La recherche est trop longue')
+  .min(1, 'Search cannot be empty')
+  .max(100, 'Search is too long')
   .trim()
   .regex(
     /^[a-zA-Z0-9\s\-_éèêëàâäôöùûüïîçÉÈÊËÀÂÄÔÖÙÛÜÏÎÇ]+$/,
-    'Caractères invalides dans la recherche'
+    'Invalid characters in search'
   );
 
-// Validation des UUIDs
-export const UUIDSchema = z.string().uuid('Identifiant invalide');
+// UUID validation
+export const UUIDSchema = z.string().uuid('Invalid identifier');
 
-// Validation des mots de passe
+// Password validation
 export const PasswordSchema = z.string()
-  .min(12, 'Le mot de passe doit contenir au moins 12 caractères')
-  .regex(/[a-z]/, 'Le mot de passe doit contenir au moins une lettre minuscule')
-  .regex(/[A-Z]/, 'Le mot de passe doit contenir au moins une lettre majuscule')
-  .regex(/[0-9]/, 'Le mot de passe doit contenir au moins un chiffre')
-  .regex(/[^a-zA-Z0-9]/, 'Le mot de passe doit contenir au moins un caractère spécial');
+  .min(12, 'Password must contain at least 12 characters')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+  .regex(/[0-9]/, 'Password must contain at least one number')
+  .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character');
 
 // ============================================
 // SANITIZATION ET SÉCURITÉ

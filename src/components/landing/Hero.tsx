@@ -22,20 +22,20 @@ const Hero = () => {
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-accent/20 border border-accent/30 mb-6 sm:mb-8 opacity-0 animate-fade-in" style={{ animationDelay: "0.2s" }}>
           <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
-          <span className="text-xs sm:text-sm font-medium text-primary-foreground/90">Visualisez votre intérieur en 3D</span>
+          <span className="text-xs sm:text-sm font-medium text-primary-foreground/90">Visualize your interior in 3D</span>
         </div>
 
         {/* Main heading */}
         <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-4 sm:mb-6 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-          Imaginez votre
+          Imagine your
           <span className="block mt-1 sm:mt-2">
-            <span className="text-gradient-gold">espace idéal</span>
+            <span className="text-gradient-gold">ideal space</span>
           </span>
         </h1>
 
         {/* Subtitle */}
         <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
-          Prenez une photo de votre pièce et placez virtuellement des meubles de grandes enseignes pour créer l'intérieur de vos rêves.
+          Take a photo of your room and virtually place furniture from top brands to create your dream interior.
         </p>
 
         {/* CTA Buttons */}
@@ -43,12 +43,12 @@ const Hero = () => {
           <Button asChild size="lg" className="gradient-gold text-accent-foreground hover:opacity-90 shadow-gold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold group w-full sm:w-auto">
             <Link to="/auth">
               <Camera className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              Commencer maintenant
+              Get started now
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg w-full sm:w-auto">
-            <a href="#features">Découvrir les fonctionnalités</a>
+            <a href="#features">Discover features</a>
           </Button>
         </div>
 
@@ -56,15 +56,15 @@ const Hero = () => {
         <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto mt-12 sm:mt-16 opacity-0 animate-fade-in" style={{ animationDelay: "1s" }}>
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-accent">500+</p>
-            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Meubles disponibles</p>
+            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Available furniture</p>
           </div>
           <div className="text-center border-x border-primary-foreground/20">
             <p className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-accent">15+</p>
-            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Partenaires</p>
+            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Partners</p>
           </div>
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-accent">3D</p>
-            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Visualisation</p>
+            <p className="text-xs sm:text-sm text-primary-foreground/70 mt-0.5 sm:mt-1">Visualization</p>
           </div>
         </div>
       </div>

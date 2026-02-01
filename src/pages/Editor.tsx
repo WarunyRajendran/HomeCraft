@@ -277,7 +277,7 @@ const Editor = () => {
 
   const handleSave = useCallback(async () => {
     if (!user) {
-      toast.error("Vous devez être connecté pour sauvegarder");
+      toast.error("You must be logged in to save");
       return;
     }
 
@@ -293,15 +293,15 @@ const Editor = () => {
       if (projectId) {
         // Update existing
         await updateProject.mutateAsync({ id: projectId, data: projectData });
-        toast.success("Projet mis à jour");
+        toast.success("Project updated");
       } else {
         // Create new
         const newProject = await createProject.mutateAsync(projectData);
-        toast.success("Projet créé");
+        toast.success("Project created");
         navigate(`/editor/${newProject.id}`, { replace: true });
       }
     } catch (error) {
-      toast.error("Erreur lors de la sauvegarde");
+      toast.error("Error saving project");
       console.error(error);
     }
   }, [user, projectId, backgroundImage, furniture, projectName, roomWidth, perspectiveSettings, createProject, updateProject, navigate]);
@@ -319,9 +319,9 @@ const Editor = () => {
             name: newName
           }
         });
-        toast.success("Nom du projet mis à jour");
+        toast.success("Project name updated");
       } catch (error) {
-        toast.error("Erreur lors de la mise à jour");
+        toast.error("Error updating");
         console.error(error);
       }
     }
@@ -331,7 +331,7 @@ const Editor = () => {
     setFurniture([]);
     setSelectedId(null);
     setBackgroundImage(null);
-    toast.info("Scène réinitialisée");
+    toast.info("Scene reset");
   }, []);
 
   // Show loading state
@@ -340,7 +340,7 @@ const Editor = () => {
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Chargement du projet...</p>
+          <p className="mt-4 text-muted-foreground">Loading project...</p>
         </div>
       </div>
     );
@@ -366,7 +366,7 @@ const Editor = () => {
             className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <span className="max-w-[100px] sm:max-w-[150px] truncate">
-              {projectName || "Nouveau projet"}
+              {projectName || "New project"}
             </span>
             <Settings className="h-3.5 w-3.5" />
           </button>
@@ -445,8 +445,8 @@ const Editor = () => {
           {viewMode === 'hybrid' && !backgroundImage && (
             <div className="w-full h-full flex items-center justify-center bg-muted rounded-lg">
               <div className="text-center text-muted-foreground">
-                <p className="text-lg font-medium">Mode Hybride</p>
-                <p className="text-sm mt-2">Importez une photo de pièce pour commencer</p>
+                <p className="text-lg font-medium">Hybrid Mode</p>
+                <p className="text-sm mt-2">Upload a room photo to get started</p>
               </div>
             </div>
           )}

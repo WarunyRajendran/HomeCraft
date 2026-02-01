@@ -24,7 +24,7 @@ export const AuthListener = () => {
         await supabase.auth.signOut();
         // Clear the hash from URL
         window.history.replaceState(null, "", window.location.pathname);
-        toast.success("Email confirmé ! Vous pouvez maintenant vous connecter.");
+        toast.success("Email confirmed! You can now log in.");
         navigate("/auth", { replace: true });
       };
       handleEmailConfirmation();

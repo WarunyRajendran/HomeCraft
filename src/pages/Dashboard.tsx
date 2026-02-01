@@ -30,10 +30,10 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await authService.signOut();
-      toast.success("Déconnexion réussie");
+      toast.success("Logged out successfully");
       navigate("/auth");
     } catch {
-      toast.error("Erreur lors de la déconnexion");
+      toast.error("Error logging out");
     }
   };
 
@@ -48,10 +48,10 @@ const Dashboard = () => {
   const handleDelete = async () => {
     try {
       await deleteProject.mutateAsync(deleteModalState.projectId);
-      toast.success("Projet supprimé");
+      toast.success("Project deleted");
       closeDeleteModal();
     } catch {
-      toast.error("Erreur lors de la suppression");
+      toast.error("Error deleting project");
     }
   };
 
@@ -86,16 +86,16 @@ const Dashboard = () => {
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
                   <Settings className="w-4 h-4 lg:mr-2" />
-                  <span className="hidden lg:inline">Administration</span>
+                  <span className="hidden lg:inline">Admin</span>
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={() => navigate("/settings")}>
                 <UserCog className="w-4 h-4 lg:mr-2" />
-                <span className="hidden lg:inline">Paramètres</span>
+                <span className="hidden lg:inline">Settings</span>
               </Button>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 lg:mr-2" />
-                <span className="hidden lg:inline">Déconnexion</span>
+                <span className="hidden lg:inline">Log out</span>
               </Button>
             </div>
           </div>
@@ -117,7 +117,7 @@ const Dashboard = () => {
                   }}
                 >
                   <Settings className="w-4 h-4 mr-2" />
-                  Administration
+                  Admin
                 </Button>
               )}
               <Button
@@ -130,7 +130,7 @@ const Dashboard = () => {
                 }}
               >
                 <UserCog className="w-4 h-4 mr-2" />
-                Paramètres
+                Settings
               </Button>
               <Button
                 variant="ghost"
@@ -142,7 +142,7 @@ const Dashboard = () => {
                 }}
               >
                 <LogOut className="w-4 h-4 mr-2" />
-                Déconnexion
+                Log out
               </Button>
             </div>
           )}
@@ -153,10 +153,10 @@ const Dashboard = () => {
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-10 pb-safe">
         <div className="mb-6 sm:mb-8">
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
-            Mes Projets
+            My Projects
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            Créez un nouveau projet ou continuez à travailler sur vos designs.
+            Create a new project or continue working on your designs.
           </p>
         </div>
 
@@ -185,9 +185,9 @@ const Dashboard = () => {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-accent/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent/20 transition-colors">
                   <Plus className="h-6 w-6 sm:h-8 sm:w-8 text-accent" />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1 sm:mb-2">Nouveau Projet</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1 sm:mb-2">New Project</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground text-center">
-                  Créez un nouveau projet d'aménagement
+                  Create a new interior design project
                 </p>
               </CardContent>
             </Card>
@@ -212,7 +212,7 @@ const Dashboard = () => {
                 <CardContent className="p-3 sm:p-4">
                   <h3 className="font-semibold text-sm sm:text-base text-foreground mb-1 truncate">{project.name}</h3>
                   <p className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
-                    Créé le {new Date(project.created_at).toLocaleDateString('fr-FR')}
+                    Created on {new Date(project.created_at).toLocaleDateString('en-US')}
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -221,7 +221,7 @@ const Dashboard = () => {
                       onClick={() => navigate(`/editor/${project.id}`)}
                     >
                       <Pencil className="h-3 w-3 mr-1" />
-                      Éditer
+                      Edit
                     </Button>
                     <Button
                       size="sm"
@@ -247,17 +247,17 @@ const Dashboard = () => {
               <Camera className="w-7 h-7 sm:w-10 sm:h-10 text-accent" />
             </div>
             <h2 className="font-display text-xl sm:text-2xl font-semibold text-card-foreground mb-2 sm:mb-3">
-              Aucun projet pour le moment
+              No projects yet
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md mx-auto">
-              Commencez par prendre une photo de votre pièce pour créer votre premier projet de design d'intérieur.
+              Start by taking a photo of your room to create your first interior design project.
             </p>
             <Button
               className="gradient-gold text-accent-foreground hover:opacity-90 shadow-gold px-6 sm:px-8"
               onClick={() => setIsNewProjectModalOpen(true)}
             >
               <Plus className="w-4 h-4 mr-2" />
-              Créer un projet
+              Create a project
             </Button>
           </div>
         )}
@@ -274,10 +274,10 @@ const Dashboard = () => {
         isOpen={deleteModalState.isOpen}
         onClose={closeDeleteModal}
         onConfirm={handleDelete}
-        title="Supprimer le projet"
-        message={`Êtes-vous sûr de vouloir supprimer le projet "${deleteModalState.projectName}" ? Cette action est irréversible.`}
-        confirmText="Supprimer"
-        cancelText="Annuler"
+        title="Delete project"
+        message={`Are you sure you want to delete the project "${deleteModalState.projectName}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
         variant="danger"
         isLoading={deleteProject.isPending}
       />

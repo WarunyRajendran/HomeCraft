@@ -38,7 +38,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
       };
       reader.readAsDataURL(file);
     } else if (file) {
-      toast.error("Format non supporté. Utilisez PNG ou JPEG.");
+      toast.error("Unsupported format. Use PNG or JPEG.");
     }
   };
 
@@ -65,15 +65,15 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 
   const handleCreate = async () => {
     if (!projectName.trim()) {
-      toast.error("Veuillez entrer un nom de projet");
+      toast.error("Please enter a project name");
       return;
     }
     if (!backgroundImage) {
-      toast.error("Veuillez ajouter une photo de votre pièce");
+      toast.error("Please add a photo of your room");
       return;
     }
     if (!user) {
-      toast.error("Vous devez être connecté");
+      toast.error("You must be logged in");
       return;
     }
 
@@ -88,11 +88,11 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
       };
 
       const newProject = await createProject.mutateAsync(projectData);
-      toast.success("Projet créé avec succès");
+      toast.success("Project created successfully");
       onClose();
       navigate(`/editor/${newProject.id}`);
     } catch (error) {
-      toast.error("Erreur lors de la création du projet");
+      toast.error("Error creating project");
       console.error(error);
     } finally {
       setIsCreating(false);
@@ -119,19 +119,19 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
       {/* Modal */}
       <Card className="relative z-10 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between pb-2 px-4 sm:px-6 pt-4 sm:pt-6 sticky top-0 bg-card z-10">
-          <h2 className="text-lg sm:text-xl font-semibold">Nouveau Projet</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">New Project</h2>
           <Button variant="ghost" size="icon" onClick={handleClose} className="h-8 w-8 sm:h-9 sm:w-9">
             <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </CardHeader>
 
         <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6 pb-4 sm:pb-6">
-          {/* Nom du projet */}
+          {/* Project name */}
           <div className="space-y-2">
-            <Label htmlFor="projectName">Nom du projet</Label>
+            <Label htmlFor="projectName">Project name</Label>
             <Input
               id="projectName"
-              placeholder="Ex: Salon moderne, Chambre cosy..."
+              placeholder="E.g.: Modern living room, Cozy bedroom..."
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               autoFocus
@@ -140,12 +140,12 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 
           {/* Upload d'image */}
           <div className="space-y-2">
-            <Label className="text-sm">Photo de la pièce</Label>
+            <Label className="text-sm">Room photo</Label>
             {backgroundImage ? (
               <div className="relative rounded-lg overflow-hidden">
                 <img
                   src={backgroundImage}
-                  alt="Aperçu"
+                  alt="Preview"
                   className="w-full h-36 sm:h-48 object-cover"
                 />
                 <Button
@@ -158,7 +158,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
                 </Button>
                 <div className="absolute bottom-2 left-2 flex items-center gap-1.5 sm:gap-2 bg-black/60 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm">
                   <Image className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  Photo importée
+                  Photo imported
                 </div>
               </div>
             ) : (
@@ -181,12 +181,12 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
                 </div>
                 <div className="text-center">
                   <p className="text-xs sm:text-sm font-medium text-foreground">
-                    Cliquez pour importer une photo
+                    Click to import a photo
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1 hidden sm:block">
-                    ou glissez-déposez votre image ici
+                    or drag and drop your image here
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">PNG ou JPEG uniquement</p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG or JPEG only</p>
                 </div>
                 <input
                   ref={fileInputRef}
@@ -201,9 +201,9 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 
           {/* Largeur de la pièce */}
           <div className="space-y-2">
-            <Label htmlFor="roomWidth">Largeur de la pièce (mètres)</Label>
+            <Label htmlFor="roomWidth">Room width (meters)</Label>
             <p className="text-xs text-muted-foreground">
-              Estimez la largeur visible sur votre photo pour un dimensionnement réaliste des meubles.
+              Estimate the visible width in your photo for realistic furniture sizing.
             </p>
             <Input
               id="roomWidth"
@@ -220,14 +220,14 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
           {/* Boutons */}
           <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-2">
             <Button variant="outline" className="flex-1 h-10 sm:h-11 text-sm" onClick={handleClose}>
-              Annuler
+              Cancel
             </Button>
             <Button
               className="flex-1 h-10 sm:h-11 text-sm gradient-gold text-accent-foreground hover:opacity-90"
               onClick={handleCreate}
               disabled={isCreating || !projectName.trim() || !backgroundImage}
             >
-              {isCreating ? "Création..." : "Créer le projet"}
+              {isCreating ? "Creating..." : "Create project"}
             </Button>
           </div>
         </CardContent>

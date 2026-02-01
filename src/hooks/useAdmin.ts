@@ -1,20 +1,15 @@
-import { useAuth } from './useAuth';
-
-// Note: La colonne is_admin n'existe pas encore dans la table profiles.
-// Pour l'instant, on utilise une liste d'emails admin en dur.
-// TODO: Ajouter la colonne is_admin à la table profiles quand nécessaire.
-
-const ADMIN_EMAILS = ['admin@homecraft.com', 'waruny@hotmail.fr'];
+import { useAuth, useProfile } from './useAuth';
 
 export const useAdmin = () => {
   const { user, loading: authLoading } = useAuth();
+  const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
 
-  // Simple check based on email for now
-  const isAdmin = user?.email ? ADMIN_EMAILS.includes(user.email) : false;
+  // is_admin exists in DB but may not be in auto-generated types
+  const isAdmin = (profile as Record<string, unknown>)?.is_admin === true;
 
   return {
     user,
     isAdmin,
-    isLoading: authLoading,
+    isLoading: authLoading || profileLoading,
   };
 };

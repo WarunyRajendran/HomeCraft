@@ -32,18 +32,18 @@ const AdminPartners = () => {
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Partenaires</h1>
-        <p className="text-muted-foreground">Liste des partenaires fournisseurs de meubles</p>
+        <h1 className="text-2xl font-bold text-foreground">Partners</h1>
+        <p className="text-muted-foreground">List of furniture supplier partners</p>
       </div>
 
       {/* Stats */}
       <div className="flex gap-4 mb-6">
         <Badge variant="outline" className="text-sm">
-          {partners?.length ?? 0} partenaires
+          {partners?.length ?? 0} partners
         </Badge>
         <Badge variant="default" className="text-sm">
           <CheckCircle className="h-3 w-3 mr-1" />
-          {partners?.filter(p => p.is_active).length ?? 0} actifs
+          {partners?.filter(p => p.is_active).length ?? 0} active
         </Badge>
       </div>
 
@@ -79,19 +79,19 @@ const AdminPartners = () => {
                   {partner.is_active ? (
                     <Badge variant="default" className="text-xs">
                       <CheckCircle className="h-3 w-3 mr-1" />
-                      Actif
+                      Active
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="text-xs">
                       <XCircle className="h-3 w-3 mr-1" />
-                      Inactif
+                      Inactive
                     </Badge>
                   )}
                 </div>
 
                 <h3 className="font-semibold text-foreground mb-1">{partner.name}</h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                  {partner.description || 'Aucune description'}
+                  {partner.description || 'No description'}
                 </p>
 
                 {partner.website_url && (
@@ -102,7 +102,7 @@ const AdminPartners = () => {
                     className="inline-flex items-center text-sm text-primary hover:underline"
                   >
                     <ExternalLink className="h-3 w-3 mr-1" />
-                    Visiter le site
+                    Visit website
                   </a>
                 )}
               </CardContent>
@@ -114,7 +114,7 @@ const AdminPartners = () => {
       {partners?.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Aucun partenaire</p>
+          <p className="text-muted-foreground">No partners</p>
         </div>
       )}
     </div>

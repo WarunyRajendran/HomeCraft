@@ -64,17 +64,17 @@ const AdminCategories = () => {
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Catégories</h1>
-        <p className="text-muted-foreground">Catégories de meubles disponibles</p>
+        <h1 className="text-2xl font-bold text-foreground">Categories</h1>
+        <p className="text-muted-foreground">Available furniture categories</p>
       </div>
 
       {/* Stats */}
       <div className="flex gap-4 mb-6">
         <Badge variant="outline" className="text-sm">
-          {categories?.length ?? 0} catégories
+          {categories?.length ?? 0} categories
         </Badge>
         <Badge variant="default" className="text-sm">
-          {categories?.reduce((acc, cat) => acc + (cat.furniture_count || 0), 0) ?? 0} meubles au total
+          {categories?.reduce((acc, cat) => acc + (cat.furniture_count || 0), 0) ?? 0} total furniture
         </Badge>
       </div>
 
@@ -107,7 +107,7 @@ const AdminCategories = () => {
                   </p>
 
                   <Badge variant="secondary">
-                    {category.furniture_count} meuble{category.furniture_count !== 1 ? 's' : ''}
+                    {category.furniture_count} item{category.furniture_count !== 1 ? 's' : ''}
                   </Badge>
                 </CardContent>
               </Card>
@@ -119,7 +119,7 @@ const AdminCategories = () => {
       {categories?.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <FolderTree className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Aucune catégorie</p>
+          <p className="text-muted-foreground">No categories</p>
         </div>
       )}
     </div>

@@ -43,7 +43,7 @@ const Header = () => {
                 isScrolled ? "text-muted-foreground" : "text-primary-foreground/80"
               }`}
             >
-              Fonctionnalités
+              Features
             </a>
             <a
               href="#"
@@ -51,7 +51,7 @@ const Header = () => {
                 isScrolled ? "text-muted-foreground" : "text-primary-foreground/80"
               }`}
             >
-              Partenaires
+              Partners
             </a>
             <a
               href="#"
@@ -59,7 +59,7 @@ const Header = () => {
                 isScrolled ? "text-muted-foreground" : "text-primary-foreground/80"
               }`}
             >
-              Tarifs
+              Pricing
             </a>
           </nav>
 
@@ -74,10 +74,10 @@ const Header = () => {
                   : "text-primary-foreground hover:bg-primary-foreground/10"
               }`}
             >
-              <Link to="/auth">Connexion</Link>
+              <Link to="/auth">Log in</Link>
             </Button>
             <Button asChild className="gradient-gold text-accent-foreground hover:opacity-90 shadow-gold">
-              <Link to="/auth?tab=signup">Commencer</Link>
+              <Link to="/auth?tab=signup">Get Started</Link>
             </Button>
           </div>
 
@@ -104,28 +104,28 @@ const Header = () => {
                 className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Fonctionnalités
+                Features
               </a>
               <a
                 href="#"
                 className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Partenaires
+                Partners
               </a>
               <a
                 href="#"
                 className="text-foreground hover:text-accent hover:bg-muted px-4 py-3 text-sm font-medium rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Tarifs
+                Pricing
               </a>
               <div className="flex flex-col gap-2 px-4 pt-3 border-t border-border/50 mt-2">
                 <Button asChild variant="outline" className="w-full h-11">
-                  <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>Connexion</Link>
+                  <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>Log in</Link>
                 </Button>
                 <Button asChild className="w-full gradient-gold text-accent-foreground h-11">
-                  <Link to="/auth?tab=signup" onClick={() => setIsMobileMenuOpen(false)}>Commencer</Link>
+                  <Link to="/auth?tab=signup" onClick={() => setIsMobileMenuOpen(false)}>Get Started</Link>
                 </Button>
               </div>
             </nav>
