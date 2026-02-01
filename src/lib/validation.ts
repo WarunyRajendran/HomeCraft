@@ -15,6 +15,8 @@ export const FurniturePlacementSchema = z.object({
   rotation: z.number(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
   scale: z.number().positive().min(0.1).max(5),
+  imageUrl: z.string().nullable().optional(),
+  modelUrl: z.string().nullable().optional(),
 });
 
 // Accepte soit une URL valide, soit une data URL base64
