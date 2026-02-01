@@ -108,6 +108,7 @@ const DraggableFurniture = ({
 
     const handleTouchMove = (event: TouchEvent) => {
       if (!isDragging || !event.touches[0]) return;
+      event.preventDefault();
       const intersection = getPositionFromEvent(event.touches[0].clientX, event.touches[0].clientY);
       if (intersection) {
         onUpdate({
@@ -126,7 +127,7 @@ const DraggableFurniture = ({
 
     if (isDragging) {
       canvas.addEventListener("pointermove", handlePointerMove);
-      canvas.addEventListener("touchmove", handleTouchMove, { passive: true });
+      canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
       window.addEventListener("pointerup", handleEnd);
       window.addEventListener("pointercancel", handleEnd);
       window.addEventListener("touchend", handleEnd);
@@ -360,10 +361,27 @@ const SceneContent = ({
 export interface FurnitureItem2DType extends FurnitureItem2D {}
 
 export const PhotoScene = (props: PhotoSceneProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const preventScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    el.addEventListener('touchmove', preventScroll, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchmove', preventScroll);
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="w-full h-full bg-muted rounded-lg overflow-hidden touch-none transition-all duration-300 ease-in-out"
-      onTouchStart={(e) => e.stopPropagation()}
     >
       <Canvas
         style={{ touchAction: 'none' }}

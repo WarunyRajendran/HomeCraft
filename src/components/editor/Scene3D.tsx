@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Room3D } from "./Room3D";
@@ -102,9 +102,26 @@ export const Scene3D = (props: Scene3DProps) => {
     setIsDragging(dragging);
   }, []);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const preventScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    el.addEventListener('touchmove', preventScroll, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchmove', preventScroll);
+    };
+  }, []);
+
   return (
-    <div className="w-full h-full bg-gradient-to-b from-slate-100 to-slate-200 rounded-lg overflow-hidden">
-      <Canvas shadows>
+    <div ref={containerRef} className="w-full h-full bg-gradient-to-b from-slate-100 to-slate-200 rounded-lg overflow-hidden touch-none">
+      <Canvas shadows style={{ touchAction: 'none' }}>
         <SceneContent {...props} isDragging={isDragging} onDragChange={handleDragChange} />
       </Canvas>
     </div>

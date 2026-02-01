@@ -344,7 +344,7 @@ const Editor = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-muted">
+    <div className="h-screen flex flex-col bg-muted overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-background border-b border-border">
         <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
@@ -413,7 +413,7 @@ const Editor = () => {
       {/* Main content */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
         {/* 3D Scene / Hybrid Scene */}
-        <div className="h-[40vh] sm:h-[45vh] md:h-auto md:flex-1 p-1.5 sm:p-2 md:p-4 shrink-0 md:shrink min-w-0">
+        <div className="h-[35vh] sm:h-[40vh] md:h-auto md:flex-1 p-1.5 sm:p-2 md:p-4 shrink-0 md:shrink min-w-0 touch-none">
           {viewMode === '3d' && (
             <Scene3D
               placements={convertTo3DPlacements(furniture)}
@@ -465,11 +465,11 @@ const Editor = () => {
         <aside
           className={`md:shrink-0 border-t md:border-t-0 md:border-l border-border overflow-hidden self-stretch will-change-[max-height,width,opacity] transition-[max-height,width,opacity] duration-300 ease-in-out ${
             isCatalogOpen
-              ? 'max-h-[50vh] md:max-h-none w-full md:w-72 lg:w-80 md:flex-none opacity-100'
+              ? 'max-h-[60vh] md:max-h-none w-full md:w-72 lg:w-80 md:flex-none opacity-100'
               : 'max-h-0 md:max-h-none md:w-0 flex-none opacity-0'
           }`}
         >
-          <div className="w-full md:w-72 lg:w-80 h-full min-h-[250px] sm:min-h-[300px] md:min-h-0 overflow-auto">
+          <div className="w-full md:w-72 lg:w-80 h-full min-h-[300px] sm:min-h-[350px] md:min-h-0 overflow-auto">
             <FurnitureCatalog onAddFurniture={handleAddFurniture} />
           </div>
         </aside>
