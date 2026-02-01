@@ -17,9 +17,9 @@ import { toast } from 'sonner';
 
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/admin/furniture', icon: Sofa, label: 'Meubles' },
-  { to: '/admin/partners', icon: Building2, label: 'Partenaires' },
-  { to: '/admin/categories', icon: FolderTree, label: 'Catégories' },
+  { to: '/admin/furniture', icon: Sofa, label: 'Furnitures' },
+  { to: '/admin/partners', icon: Building2, label: 'Partners' },
+  { to: '/admin/categories', icon: FolderTree, label: 'Categories' },
 ];
 
 export const AdminLayout = () => {
@@ -88,7 +88,7 @@ export const AdminLayout = () => {
           }}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Retour à l'app
+          Back to the app
         </Button>
         <Button
           variant="ghost"
@@ -96,7 +96,7 @@ export const AdminLayout = () => {
           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4 mr-2" />
-          Déconnexion
+          Log out
         </Button>
       </div>
     </>
