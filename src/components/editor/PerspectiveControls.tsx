@@ -12,11 +12,9 @@ import {
   Camera,
   Move,
   RotateCw,
-  Grid3X3,
   Check,
   X,
   Ruler,
-  Eye,
 } from 'lucide-react';
 import type { PerspectiveSettings, CalibrationStep } from '@/types/perspective';
 import { DEFAULT_PERSPECTIVE_SETTINGS } from '@/types/perspective';
@@ -26,8 +24,6 @@ interface PerspectiveControlsProps {
   onChange: (settings: PerspectiveSettings) => void;
   calibrationStep: CalibrationStep;
   onCalibrationStepChange: (step: CalibrationStep) => void;
-  showGrid: boolean;
-  onShowGridChange: (show: boolean) => void;
 }
 
 export const PerspectiveControls = ({
@@ -35,8 +31,6 @@ export const PerspectiveControls = ({
   onChange,
   calibrationStep,
   onCalibrationStepChange,
-  showGrid,
-  onShowGridChange,
 }: PerspectiveControlsProps) => {
   // Handler générique pour les changements de valeur
   const handleChange = useCallback(
@@ -69,34 +63,6 @@ export const PerspectiveControls = ({
           Réinitialiser
         </Button>
       </div>
-
-      {/* Boutons de calibration */}
-      <div className="flex gap-2">
-        <Button
-          variant={calibrationStep === 'floor-corners' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() =>
-            onCalibrationStepChange(
-              calibrationStep === 'floor-corners' ? 'idle' : 'floor-corners'
-            )
-          }
-          className="flex-1 text-xs"
-        >
-          <Grid3X3 className="h-3.5 w-3.5 mr-1" />
-          {calibrationStep === 'floor-corners' ? 'Annuler' : 'Définir le sol'}
-        </Button>
-        <Button
-          variant={showGrid ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => onShowGridChange(!showGrid)}
-          className="text-xs"
-          title="Afficher/masquer la grille"
-        >
-          <Eye className="h-3.5 w-3.5" />
-        </Button>
-      </div>
-
-      <div className="h-px bg-border" />
 
       {/* Contrôles de caméra */}
       <div className="space-y-4">

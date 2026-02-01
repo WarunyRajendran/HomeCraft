@@ -15,6 +15,7 @@ import {
   Box,
   Layers,
   SlidersHorizontal,
+  Focus,
 } from "lucide-react";
 import type { CalibrationStep } from "@/types/perspective";
 
@@ -46,6 +47,8 @@ interface PhotoEditorToolbarProps {
   onSetViewMode?: (mode: '3d' | 'hybrid') => void;
   onCalibrate?: () => void;
   calibrationStep?: CalibrationStep;
+  onTogglePerspective?: () => void;
+  isPerspectiveOpen?: boolean;
 }
 
 export const PhotoEditorToolbar = ({
@@ -64,6 +67,8 @@ export const PhotoEditorToolbar = ({
   onSetViewMode,
   onCalibrate,
   calibrationStep = 'idle',
+  onTogglePerspective,
+  isPerspectiveOpen = false,
 }: PhotoEditorToolbarProps) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
@@ -97,16 +102,16 @@ export const PhotoEditorToolbar = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-4 px-2 md:px-4 py-2 bg-background border-b border-border">
+    <div className="flex items-center gap-1 sm:gap-2 md:gap-4 px-1.5 sm:px-2 md:px-4 py-1.5 sm:py-2 bg-background border-b border-border overflow-x-auto scrollbar-none">
       {/* Menu Options */}
-      <div className="relative" ref={optionsRef}>
+      <div className="relative shrink-0" ref={optionsRef}>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
-          className="h-8 sm:h-9 px-2 sm:px-3"
+          className="h-7 sm:h-9 px-1.5 sm:px-3"
         >
-          <Settings className="h-4 w-4 sm:mr-1" />
+          <Settings className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
           <span className="hidden sm:inline text-xs sm:text-sm">Options</span>
         </Button>
 
@@ -157,67 +162,76 @@ export const PhotoEditorToolbar = ({
         />
       </div>
 
-      <div className="h-6 w-px bg-border hidden sm:block" />
-
       {/* Toggle view mode: Hybrid / 3D */}
-      <div className="flex items-center rounded-md border border-border overflow-hidden">
+      <div className="flex items-center rounded-md border border-border overflow-hidden shrink-0">
         <Button
           variant={viewMode === 'hybrid' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => onSetViewMode ? onSetViewMode('hybrid') : onToggleViewMode()}
-          className="h-8 sm:h-9 px-2 sm:px-3 rounded-none border-0"
+          className="h-7 sm:h-9 px-1.5 sm:px-3 rounded-none border-0"
           title="Mode Hybride (meubles 3D sur photo)"
           disabled={!backgroundImage}
         >
-          <Layers className="h-4 w-4 sm:mr-1" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Hybride</span>
+          <Layers className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
+          <span className="hidden md:inline text-xs">Hybride</span>
         </Button>
-        <div className="w-px h-6 bg-border" />
+        <div className="w-px h-5 sm:h-6 bg-border" />
         <Button
           variant={viewMode === '3d' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => onSetViewMode ? onSetViewMode('3d') : onToggleViewMode()}
-          className="h-8 sm:h-9 px-2 sm:px-3 rounded-none border-0"
+          className="h-7 sm:h-9 px-1.5 sm:px-3 rounded-none border-0"
           title="Mode 3D (pièce virtuelle)"
         >
-          <Box className="h-4 w-4 sm:mr-1" />
-          <span className="hidden sm:inline text-xs sm:text-sm">3D</span>
+          <Box className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
+          <span className="hidden md:inline text-xs">3D</span>
         </Button>
       </div>
 
-      {/* Calibration button (hybrid mode only) */}
+      {/* Calibration + Perspective buttons (hybrid mode only) */}
       {viewMode === 'hybrid' && (
-        <Button
-          variant={calibrationStep !== 'idle' ? 'default' : 'outline'}
-          size="sm"
-          onClick={onCalibrate}
-          className="h-8 sm:h-9 px-2 sm:px-3"
-          title="Calibrer la perspective"
-        >
-          <SlidersHorizontal className="h-4 w-4 sm:mr-1" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Calibrer</span>
-        </Button>
+        <>
+          <Button
+            variant={calibrationStep !== 'idle' ? 'default' : 'outline'}
+            size="sm"
+            onClick={onCalibrate}
+            className="h-7 sm:h-9 px-1.5 sm:px-3 shrink-0"
+            title="Calibrer la perspective"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
+            <span className="hidden md:inline text-xs">Calibrer</span>
+          </Button>
+          <Button
+            variant={isPerspectiveOpen ? 'default' : 'outline'}
+            size="sm"
+            onClick={onTogglePerspective}
+            className="h-7 sm:h-9 px-1.5 sm:px-3 shrink-0 md:hidden"
+            title="Paramètres de perspective"
+          >
+            <Focus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          </Button>
+        </>
       )}
 
-      <div className="h-6 w-px bg-border hidden sm:block" />
+      <div className="h-5 sm:h-6 w-px bg-border shrink-0 hidden sm:block" />
 
-      {/* Selection controls - toujours visibles, désactivés si rien n'est sélectionné */}
-      <div className="hidden sm:flex items-center gap-2">
-        <span className={`text-xs sm:text-sm font-medium truncate max-w-[100px] sm:max-w-[120px] ${selectedItem ? 'text-foreground' : 'text-muted-foreground'}`}>
+      {/* Selection controls */}
+      <div className="hidden md:flex items-center gap-2 shrink-0">
+        <span className={`text-xs font-medium truncate max-w-[100px] ${selectedItem ? 'text-foreground' : 'text-muted-foreground'}`}>
           {selectedItem ? selectedItem.name : 'Aucun meuble'}
         </span>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
         <Button
           variant="outline"
           size="icon"
           onClick={() => onRotate("left")}
           title="Pivoter à gauche"
           disabled={!selectedItem}
-          className="h-8 w-8 sm:h-9 sm:w-9"
+          className="h-7 w-7 sm:h-9 sm:w-9"
         >
-          <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
         <Button
           variant="outline"
@@ -225,53 +239,49 @@ export const PhotoEditorToolbar = ({
           onClick={() => onRotate("right")}
           title="Pivoter à droite"
           disabled={!selectedItem}
-          className="h-8 w-8 sm:h-9 sm:w-9"
+          className="h-7 w-7 sm:h-9 sm:w-9"
         >
-          <RotateCw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <RotateCw className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
       </div>
 
-      <div className={`flex items-center gap-2 ${!selectedItem ? 'opacity-50' : ''}`}>
-        <ZoomOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
+      <div className={`flex items-center gap-1 shrink-0 ${!selectedItem ? 'opacity-50' : ''}`}>
+        <ZoomOut className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
         <Slider
           value={[selectedItem?.scale ?? 1]}
           onValueChange={([value]) => onScale(value)}
           min={0.3}
           max={2}
           step={0.1}
-          className="w-16 sm:w-20 md:w-24"
+          className="w-12 sm:w-20 md:w-24"
           disabled={!selectedItem}
         />
-        <ZoomIn className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
+        <ZoomIn className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
       </div>
 
-      <div className="h-6 w-px bg-border" />
+      <div className="h-5 sm:h-6 w-px bg-border shrink-0" />
 
       <Button
         variant="destructive"
         size="sm"
         onClick={onDelete}
         disabled={!selectedItem}
-        className="h-8 sm:h-9 px-2 sm:px-3"
+        className="h-7 sm:h-9 px-1.5 sm:px-3 shrink-0"
       >
-        <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />
-        <span className="hidden sm:inline text-xs sm:text-sm">Supprimer</span>
+        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
       </Button>
 
-      <div className="flex-1" />
+      <div className="flex-1 min-w-0" />
 
       {/* Global actions */}
       <Button
         size="sm"
         onClick={onSave}
         disabled={isSaving}
-        className="h-8 sm:h-9 px-2 sm:px-3 gradient-gold text-accent-foreground hover:opacity-90"
+        className="h-7 sm:h-9 px-1.5 sm:px-3 gradient-gold text-accent-foreground hover:opacity-90 shrink-0"
       >
         {isSaving ? (
-          <>
-            <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1 animate-spin" />
-            <span className="hidden sm:inline text-xs sm:text-sm">Sauvegarde...</span>
-          </>
+          <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
         ) : (
           <>
             <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-1" />

@@ -57,7 +57,9 @@ const Editor = () => {
   const [viewMode, setViewMode] = useState<'3d' | 'hybrid'>('hybrid');
   const [perspectiveSettings, setPerspectiveSettings] = useState<PerspectiveSettings>(DEFAULT_PERSPECTIVE_SETTINGS);
   const [calibrationStep, setCalibrationStep] = useState<CalibrationStep>('idle');
-  const [showGrid, setShowGrid] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showGrid, _setShowGrid] = useState(false);
+  const [isPerspectiveOpen, setIsPerspectiveOpen] = useState(false);
 
   // Fetch project if editing
   const { data: project, isLoading: projectLoading } = useProject(projectId);
@@ -124,6 +126,7 @@ const Editor = () => {
   // Start calibration
   const handleCalibrate = useCallback(() => {
     setCalibrationStep(prev => prev === 'idle' ? 'floor-corners' : 'idle');
+    setIsPerspectiveOpen(false);
   }, []);
 
   // Conversion function from 2D to Hybrid 3D placements
@@ -408,6 +411,8 @@ const Editor = () => {
         onSetViewMode={handleSetViewMode}
         onCalibrate={handleCalibrate}
         calibrationStep={calibrationStep}
+        onTogglePerspective={() => setIsPerspectiveOpen(prev => !prev)}
+        isPerspectiveOpen={isPerspectiveOpen}
       />
 
       {/* Main content */}
@@ -447,18 +452,40 @@ const Editor = () => {
           )}
         </div>
 
-        {/* Perspective Controls (hybrid mode only) */}
+        {/* Perspective Controls (hybrid mode only) - drawer on mobile, sidebar on desktop */}
         {viewMode === 'hybrid' && (
-          <aside className="md:shrink-0 border-t md:border-t-0 md:border-l border-border overflow-auto p-2 w-full md:w-auto">
-            <PerspectiveControls
-              settings={perspectiveSettings}
-              onChange={setPerspectiveSettings}
-              calibrationStep={calibrationStep}
-              onCalibrationStepChange={setCalibrationStep}
-              showGrid={showGrid}
-              onShowGridChange={setShowGrid}
-            />
-          </aside>
+          <>
+            {/* Mobile: drawer overlay */}
+            <div
+              className={`md:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
+                isPerspectiveOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <div className="absolute inset-0 bg-black/40" onClick={() => setIsPerspectiveOpen(false)} />
+              <div
+                className={`absolute bottom-0 left-0 right-0 bg-background rounded-t-2xl p-4 max-h-[70vh] overflow-auto transition-transform duration-300 ${
+                  isPerspectiveOpen ? 'translate-y-0' : 'translate-y-full'
+                }`}
+              >
+                <div className="w-10 h-1 bg-border rounded-full mx-auto mb-3" />
+                <PerspectiveControls
+                  settings={perspectiveSettings}
+                  onChange={setPerspectiveSettings}
+                  calibrationStep={calibrationStep}
+                  onCalibrationStepChange={setCalibrationStep}
+                />
+              </div>
+            </div>
+            {/* Desktop: sidebar */}
+            <aside className="hidden md:block md:shrink-0 border-l border-border overflow-auto p-2 w-auto">
+              <PerspectiveControls
+                settings={perspectiveSettings}
+                onChange={setPerspectiveSettings}
+                calibrationStep={calibrationStep}
+                onCalibrationStepChange={setCalibrationStep}
+              />
+            </aside>
+          </>
         )}
 
         {/* Catalog sidebar */}
